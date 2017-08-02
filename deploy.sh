@@ -16,6 +16,7 @@ rsync -av speech.sh ${dest}/root/
 
 cd apache-confs
 for site in $(ls *.conf | sed 's/\.conf//g'); do
+	$ssh a2dissite $site >/dev/null 2>&1
 	$ssh a2ensite $site >/dev/null 2>&1
 	[ $? -ne 0 ] && echo "Error enabling $site site!" && error=1
 done
