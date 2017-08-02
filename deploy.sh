@@ -11,6 +11,7 @@ fi
 
 rsync -av apache-confs/* ${dest}/etc/apache2/sites-available/
 rsync -av webdirs/* ${dest}/var/www/
+rsync -av speech.sh ${dest}/usr/bin/
 rsync -av speech.sh ${dest}/root/
 
 cd apache-confs
