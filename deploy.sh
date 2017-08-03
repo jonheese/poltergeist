@@ -12,7 +12,7 @@ fi
 rsync -av apache-confs/* ${dest}/etc/apache2/sites-available/
 rsync -av webdirs/* ${dest}/var/www/
 rsync -av speech.sh ${dest}/usr/bin/
-$ssh "rm -f /root/speech.sh; ln -s /usr/bin/speech.sh /root/speech.sh"
+$ssh "rm -f /root/speech.sh; ln -s /usr/bin/speech.sh /root/speech.sh; touch /var/log/speech.log; chown www-data:www-data /var/log/speech.log"
 
 cd apache-confs
 for site in $(ls *.conf | sed 's/\.conf//g'); do

@@ -13,8 +13,7 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$text = $_POST['text'];
-	exec("/usr/bin/speech.sh $text");
-	exec("/usr/bin/play /tmp/speech.mp3 pad 30000s@0:00 >/dev/null 2>&1 &");
+	exec("/usr/bin/speech.sh $text &");
 }
 ?>
 	</body>
