@@ -2,13 +2,15 @@
 
 INPUT=$*
 STRINGNUM=0
-PROGNAME=$0
 
-if [ "$PROGNAME" == "/root/speech.sh" ] ; then
-	output="/tmp/trump"
+user="www-data"
+
+if [ "$(realpath -s $0)" == "/root/speech.sh" ] ; then
+	PROGNAME="trump"
 else
-	output="/tmp/speech"
+	PROGNAME="speech"
 fi
+output="/tmp/${PROGNAME}"
 
 if [ -z "$INPUT" ] ; then
 	echo "No input found"
@@ -38,14 +40,34 @@ for key in "${!SHORT[@]}" ; do
 	#echo "line: $key is: ${SHORT[$key]}"
 	#echo "Getting line: $(($key+1)) of $(($STRINGNUM+1))"
 	NEXTURL=$(echo ${SHORT[$key]} | xxd -plain | tr -d '\n' | sed 's/\(..\)/%\1/g')
-	wget -q -U "Mozilla" -O ${output}${keynum}.mp3 "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=$NEXTURL&tl=En-us"
+	if [ $UID -eq 0 ] ; then
+		sudo -u $user wget -q -U "Mozilla" -O ${output}${keynum}.mp3 "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=$NEXTURL&tl=En-us"
+	else
+		wget -q -U "Mozilla" -O ${output}${keynum}.mp3 "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=$NEXTURL&tl=En-us"
+	fi
 	if [ $? -ne 0 ] ; then
 		echo "Unable to play $NEXTURL"
-		wget -q -U "Mozilla" -O ${output}${keynum}.mp3 "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=rururururururururururu&tl=En-us"
+		wgetcmd=wget -q -U "Mozilla" -O ${output}${keynum}.mp3 "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=rururururururururururu&tl=En-us"
+		if [ $UID -eq 0 ] ; then
+			sudo -u $user $wgetcmd
+		else
+			$wgetcmd
+		fi
 	fi
 	keynum=$(($keynum+1))
 done
 
-cat ${output}*.mp3 > ${output}.mp3
-/usr/bin/play ${output}.mp3 pad 28000s@0:00 >/dev/null 2>&1
-echo "$*" >> /var/log/speech.log
+catcmd="cat ${output}*.mp3"
+if [ $UID -eq 0 ] ; then
+	sudo -u $user $catcmd > ${output}.mp3
+else
+	$catcmd > ${output}.mp3
+fi
+echo "${PROGNAME}: $*" >> /var/log/speech.log
+
+playcmd="/usr/bin/play ${output}.mp3 pad 28000s@0:00"
+if [ $UID -eq 0 ] ; then
+	sudo -u $user $playcmd >/dev/null 2>&1
+else 
+	$playcmd >/dev/null 2>&1
+fi

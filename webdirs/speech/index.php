@@ -13,7 +13,7 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$text = $_POST['text'];
-	exec("/usr/bin/speech.sh $text &");
+	exec("/usr/bin/speech.sh \"$text\" &");
 }
 ?>
 	</body>
