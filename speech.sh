@@ -71,3 +71,4 @@ if [ $UID -eq 0 ] ; then
 else 
 	$playcmd >/dev/null 2>&1
 fi
+[ "$PROGNAME" == "speech" ] && rm -f ${output}*.mp3
