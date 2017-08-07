@@ -16,13 +16,17 @@ rsync -av apache-confs/* ${dest}/etc/apache2/sites-available/
 rsync -av webdirs/* ${dest}/var/www/
 rsync -av speech.sh ${dest}/usr/bin/
 
+set -x
 echo ""
 echo "Installing speech script${onstring}..."
-$ssh "rm -f /root/speech.sh; ln -s /usr/bin/speech.sh /root/speech.sh; touch /var/log/speech.log; chown www-data:www-data /var/log/speech.log"
+cmd="rm -f /root/speech.sh; ln -s /usr/bin/speech.sh /root/speech.sh; touch /var/log/speech.log; chown www-data:www-data /var/log/speech.log"
+$ssh $cmd
 
 echo ""
 echo "Ensuring speech user is present${onstring}..."
-$ssh "id -u speech >/dev/null 2>&1; [ \$? -ne 0 ] && useradd -s /bin/bash -m speech"
+cmd="id -u speech >/dev/null 2>&1; [ \$? -ne 0 ] && useradd -s /bin/bash -m speech"
+$ssh $cmd
+set +x
 
 echo ""
 echo "Enabling sites${onstring}..."
