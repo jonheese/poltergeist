@@ -4,7 +4,7 @@
 		<title>Two Weeks!</title>
 	</head>
 	<body>
-		<p align="center"><img height='100%' src='twoweeks.jpg' /></p>
+		<p align="center"><img src='twoweeks.jpg' /></p>
 <?php
 exec('/usr/bin/play /var/www/twoweeks/twoweeks.mp3 pad 30000s@0:00 >/dev/null 2>&1 &');
 ?>
