@@ -16,7 +16,7 @@ if [ -n "$1" ] ; then
 	onstring=" on $1"
 fi
 
-echo "Coping files${tostring}..."
+echo "Copying files${tostring}..."
 rsync -av apache-confs/* ${dest}/etc/apache2/sites-available/
 rsync -av webdirs/* ${dest}/var/www/
 rsync -av speech.sh ${dest}/usr/bin/
