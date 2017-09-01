@@ -4,7 +4,7 @@
 		<title>Ooh!</title>
 	</head>
 	<body>
-		<p align="center"><img height='100%' src='ow.jpg' /></p>
+		<p align="center"><img src='ow.jpg' /></p>
 <?php
 exec('/usr/bin/play /var/www/ow/ow.mp3 pad 30000s@0:00 >/dev/null 2>&1 &');
 ?>

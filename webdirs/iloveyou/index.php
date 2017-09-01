@@ -1,6 +1,6 @@
 <html>
 	<head>
-<!--		<link rel="shortcut icon" href="nowords.png" />-->
+		<link rel="shortcut icon" href="iloveyou.png" />
 		<title>I love you and I miss you</title>
 	</head>
 	<body>
