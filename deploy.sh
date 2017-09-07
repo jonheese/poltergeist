@@ -34,9 +34,15 @@ do_cmd id -u speech >/dev/null 2>&1
 [ $? -ne 0 ] && do_cmd useradd -s /bin/bash -m speech
 
 echo ""
+echo "Getting apache config${onstring}..."
+apachectl=$(do_cmd apachectl -S)
+
+echo ""
 echo "Enabling sites${onstring}..."
 cd apache-confs
 for site in $(ls *.conf | sed 's/\.conf//g'); do
+	found=$(echo $apachectl | grep $site)
+	[ -n "$found" ] && continue
 	echo " - ${site}"
 	do_cmd a2ensite $site >/dev/null 2>&1
 	[ $? -ne 0 ] && echo "Error enabling $site site!" && error=1
