@@ -51,6 +51,7 @@ cd ..
 
 if [ $error -eq 0 ] ; then
 	do_cmd service apache2 reload
+	do_cmd systemctl daemon-reload
 	[ $? -ne 0 ] && echo "Error reloading apache2 service!" && exit 1
 	echo "Sites successfully deployed${tostring}!"
 else
