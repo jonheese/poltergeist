@@ -6,7 +6,7 @@
 	<body>
 		<p align="center"><img src='onthephone.jpg' /></p>
 <?php
-exec('/usr/bin/play /var/www/onthephone/onthephone.mp3 pad 30000s@0:00 >/dev/null 2>&1 &');
+exec('/usr/bin/speech.sh "There is someone on the phone.  Please keep your voices down and language clean. Thank you" >/dev/null 2>&1 &');
 ?>
 	</body>
 </html>
