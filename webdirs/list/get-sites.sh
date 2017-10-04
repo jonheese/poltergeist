@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -x
 
-hostname=$(/bin/hostname)
+hostname=$(/bin/hostname | cut -d'.' -f1)
 apachectl=$(/usr/sbin/apachectl -S | grep -v hdmi)
 root_sites=$(echo "$apachectl" | grep namevhost | awk '{print $4}' | sort)
 all_sites=$(echo "$apachectl" | grep "namevhost\|alias")
@@ -11,9 +11,11 @@ IFS=$'\n'
 
 for root_site in $root_sites; do
 	indent=""
+#	set -x
 	dns_lookup=$(dig +short $root_site)
 	hostname_found=$(echo "$dns_lookup" | grep $hostname)
 	[ -n "$hostname_found" ]&& sites=$(printf "%s\n@%s" "$sites" "$root_site") && indent="&nbsp;&nbsp;&nbsp;"
+	set +x
 	possible_aliases=$(echo "$all_sites" | grep -A99 $root_site | tail -n+2)
 	for possible_alias in $possible_aliases ; do
 		namevhost_found=$(echo "$possible_alias" | grep "namevhost")
