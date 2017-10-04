@@ -49,6 +49,10 @@ for site in $(ls *.conf | sed 's/\.conf//g'); do
 done
 cd ..
 
+echo "Disabling PHP safe_mode${onstring}..."
+rsync -av disable_php_safe_mode.sh ${dest}/root/
+do_cmd /root/disable_php_safe_mode.sh
+
 if [ $error -eq 0 ] ; then
 	do_cmd service apache2 reload
 	do_cmd systemctl daemon-reload
