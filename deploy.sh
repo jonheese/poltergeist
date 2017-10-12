@@ -41,7 +41,7 @@ echo ""
 echo "Enabling sites${onstring}..."
 cd apache-confs
 for site in $(ls *.conf | sed 's/\.conf//g'); do
-	found=$(echo $apachectl | grep $site)
+	found=$(echo $apachectl | grep " $site\.")
 	[ -n "$found" ] && continue
 	echo " - ${site}"
 	do_cmd a2ensite $site >/dev/null 2>&1
