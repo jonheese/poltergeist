@@ -20,8 +20,7 @@ echo "Copying files${tostring}..."
 rsync -av apache-confs/* ${dest}/etc/apache2/sites-available/
 rsync -av webdirs/* ${dest}/var/www/
 rsync -av speech.sh ${dest}/usr/bin/
-do_cmd chown www-data:www-data /var/www/*
-do_cmd [ ! -f /var/www/hostile/level.txt ] && touch /var/www/hostile/level.txt
+do_cmd /root/poltergeist/misc_setup.sh
 
 echo ""
 echo "Installing speech script${onstring}..."
