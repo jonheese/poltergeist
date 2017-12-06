@@ -4,7 +4,7 @@
 		<title>Jingle Bell</title>
 	</head>
 	<body>
-		<p align="center"><img height='100%' src='jinglebell.jpg' /></p>
+		<p align="center"><img height='75%' src='jinglebell.jpg' /></p>
 <?php
 exec('/usr/bin/play /var/www/jinglebell/jinglebell.mp3 pad 30000s@0:00 >/dev/null 2>&1 &');
 ?>
