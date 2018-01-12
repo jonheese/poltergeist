@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -x
 
-. pilist.txt
+. /var/www/list/pilist.txt
 hostname=$(/bin/hostname | cut -d'.' -f1)
 apachectl=$(/usr/sbin/apachectl -S 2>/dev/null | grep -v hdmi)
 root_sites=$(echo "$apachectl" | grep namevhost | awk '{print $4}' | sort)

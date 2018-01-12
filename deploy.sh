@@ -39,7 +39,7 @@ echo "Getting apache config${onstring}..."
 apachectl=$(do_cmd apachectl -S)
 
 echo ""
-echo "Copying poltercron to /etc/cron.d{$onstring}..."
+echo "Copying poltercron to /etc/cron.d${onstring}..."
 rsync -av poltercron ${dest}/etc/cron.d/
 
 echo ""
