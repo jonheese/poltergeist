@@ -1,0 +1,3 @@
+site_pi_list="
+inetu-hdmi19.int.inetu.net .inetu.org
+inetu-hdmi13.int.inetu.net .inetu.net"

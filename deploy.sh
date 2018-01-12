@@ -39,6 +39,10 @@ echo "Getting apache config${onstring}..."
 apachectl=$(do_cmd apachectl -S)
 
 echo ""
+echo "Copying poltercron to /etc/cron.d{$onstring}..."
+rsync -av poltercron ${dest}/etc/cron.d/
+
+echo ""
 echo "Enabling sites${onstring}..."
 cd apache-confs
 for site in $(ls *.conf | sed 's/\.conf//g'); do
