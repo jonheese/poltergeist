@@ -17,14 +17,16 @@ sed -i "s/@site@/$site_name/g" apache-confs/${site_name}.conf
 echo -n "Do you have any customizations to make before commit/push? [y/N]: "
 read custom
 
-if [ "$custom" == "y" or "$custom" == "Y" ] ; then
+if [ "$custom" == "y" -o "$custom" == "Y" ] ; then
     echo "Please do the following steps manually after customization is complete:"
+    echo "   git add ."
     echo "   git commit -a"
     echo "   git push -u origin master"
     echo "   /root/jh/bin/deploy-poltergeist.sh"
     exit 0
 fi
 
+git add .
 git commit -a
 if [ $? -ne 0 ] ; then
     echo "Error committing changes.  Please do the following steps manually:"
