@@ -19,8 +19,8 @@ fi
 if [ -n "$imgfilepath" ] ; then
     imgfile=$(basename $imgfilepath)
     sed -i "s/@imgfile@/$imgfile/g" webdirs/${site_name}/index.php
-    sed -i "s/\<\!\-\-//g" webdirs/${site_name}/index.php
-    sed -i "s/\-\-\>//g" webdirs/${site_name}/index.php
+    sed -i "s/<\!\-\-//g" webdirs/${site_name}/index.php
+    sed -i "s/\-\->//g" webdirs/${site_name}/index.php
     mv $imgfilepath webdirs/${site_name}/
 fi
 
