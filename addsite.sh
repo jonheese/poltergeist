@@ -9,6 +9,21 @@ mkdir webdirs/$site_name
 cp webdirs/index.php.template webdirs/$site_name/index.php
 sed -i "s/@site@/$site_name/g" webdirs/${site_name}/index.php
 sed -i "s/@title@/$page_title/g" webdirs/${site_name}/index.php
+
+if [ -f webdirs/${site_name}.jpg ] ; then
+    imgfilepath="webdirs/${site_name}.jpg"
+elif [ -f webdirs/${site_name}.png ] ; then
+    imgfilepath="webdirs/${site_name}.png"
+fi
+
+if [ -n "$imgfilepath" ] ; then
+    imgfile=$(basename $imgfilepath)
+    sed -i "s/@imgfile@/$imgfile/g" webdirs/${site_name}/index.php
+    sed -i "s/\<\!\-\-//g" webdirs/${site_name}/index.php
+    sed -i "s/\-\-\>//g" webdirs/${site_name}/index.php
+    mv $imgfilepath webdirs/${site_name}/
+fi
+
 mv webdirs/${site_name}.mp3 webdirs/$site_name/${site_name}.mp3
 
 cp apache-confs/site.conf.template apache-confs/${site_name}.conf
