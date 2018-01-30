@@ -1,0 +1,7 @@
+<VirtualHost *:80>
+    ServerName sonofabitchjesuschristfuckshit.tv.inetu.org
+    ServerAlias sonofabitchjesuschristfuckshit.tv.inetu.net
+	ServerAlias language.tv.inetu.org
+	ServerAlias language.tv.inetu.net
+	DocumentRoot /var/www/sonofabitchjesuschristfuckshit
+</VirtualHost>
