@@ -1,0 +1,1 @@
+* * * * * root /var/www/list/get-sites.sh > /var/www/list/index.html.import && mv /var/www/list/index.html.import /var/www/list/index.html

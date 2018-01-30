@@ -63,12 +63,13 @@ if [ $UID -eq 0 ] ; then
 else
 	$catcmd > ${output}.mp3
 fi
-echo "${PROGNAME}: $*" >> /var/log/speech.log
+date=$(date)
+echo "${date} - ${PROGNAME}: $*" >> /var/log/speech.log
 
 playcmd="/usr/bin/play ${output}.mp3 pad 28000s@0:00"
 if [ $UID -eq 0 ] ; then
 	sudo -u $user $playcmd >/dev/null 2>&1
-else 
+else
 	$playcmd >/dev/null 2>&1
 fi
 [ "$PROGNAME" == "speech" ] && rm -f ${output}*.mp3
