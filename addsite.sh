@@ -42,7 +42,7 @@ if [ "$custom" == "y" -o "$custom" == "Y" ] ; then
 fi
 
 git add .
-git commit -a
+git commit -a -m "Add $site_name site"
 if [ $? -ne 0 ] ; then
     echo "Error committing changes.  Please do the following steps manually:"
     echo "   git commit -a"
