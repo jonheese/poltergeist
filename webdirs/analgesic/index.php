@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title></title>
+		<title>Analgesic</title>
 	</head>
 	<body>
 <!--		<p align="center"><img src='@imgfile@' /></p>-->
