@@ -16,7 +16,7 @@ if [ -z "$INPUT" ] ; then
 	echo "No input found"
 	exit 0
 fi
- 
+
 export DISPLAY="[0]:0"
 ary=($INPUT)
 for key in "${!ary[@]}" ; do
@@ -72,4 +72,4 @@ if [ $UID -eq 0 ] ; then
 else
 	$playcmd >/dev/null 2>&1
 fi
-[ "$PROGNAME" == "speech" ] && rm -f ${output}*.mp3
+#[ "$PROGNAME" == "speech" ] && rm -f ${output}*.mp3
