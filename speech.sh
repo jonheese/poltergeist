@@ -57,16 +57,16 @@ for key in "${!SHORT[@]}" ; do
 	keynum=$(($keynum+1))
 done
 
-catcmd="cat ${output}*.mp3"
+catcmd="/usr/bin/sox ${output}*.mp3 ${output}.mp3"
 if [ $UID -eq 0 ] ; then
-	sudo -u $user $catcmd > ${output}.mp3
+	sudo -u $user $catcmd
 else
-	$catcmd > ${output}.mp3
+	$catcmd
 fi
 date=$(date)
 echo "${date} - ${PROGNAME}: $*" >> /var/log/speech.log
 
-playcmd="/usr/bin/play ${output}.mp3 pad 28000s@0:00"
+playcmd="/usr/bin/play ${output}.mp3 silence 0 -1 0.0 0.1% pad 28000s@0:00"
 if [ $UID -eq 0 ] ; then
 	sudo -u $user $playcmd >/dev/null 2>&1
 else
