@@ -8,8 +8,8 @@ if [ ! -f apache-confs/${site_name}.conf ] ; then
     exit 1
 fi
 
-git rm -rf webdirs/$site_name
-git rm -f apache-confs/${site_name}.conf
+git rm -r webdirs/$site_name
+git rm apache-confs/${site_name}.conf
 
 echo "$site_name" >> deletion_list.txt
 git add deletion_list.txt

@@ -57,17 +57,19 @@ cd ..
 
 echo ""
 echo "Removing sites${onstring}..."
-for site in $(cat deletion_list) ; do
-    found=$(echo "$apachectl" | grep " $site\.")
-    [ -n "$found" ] && continue
-    echo " - ${site}"
-    do_cmd a2dissite $site >/dev/null 2>&1
-    [ $? -ne 0 ] && echo "Error disabling $site site!" && error=1
-    do_cmd rm -rf /var/www/${site}
-    [ $? -ne 0 ] && echo "Error removing $site content!" && error=1
-    do_cmd rm -rf /etc/apache2/sites-available/${site}.conf
-    [ $? -ne 0 ] && echo "Error removing $site config!" && error=1
-done
+if [ -s deletion_list.txt ] ; then
+    for site in $(cat deletion_list.txt) ; do
+        found=$(echo "$apachectl" | grep " $site\.")
+        [ -z "$found" ] && continue
+        echo " - ${site}"
+        do_cmd a2dissite $site >/dev/null 2>&1
+        [ $? -ne 0 ] && echo "Error disabling $site site!" && error=1
+        do_cmd rm -rf /var/www/${site}
+        [ $? -ne 0 ] && echo "Error removing $site content!" && error=1
+        do_cmd rm -rf /etc/apache2/sites-available/${site}.conf
+        [ $? -ne 0 ] && echo "Error removing $site config!" && error=1
+    done
+fi
 
 echo "Disabling PHP safe_mode${onstring}..."
 rsync -av disable_php_safe_mode.sh ${dest}/root/
