@@ -37,7 +37,7 @@ if [ "$custom" == "y" -o "$custom" == "Y" ] ; then
     echo "   git add ."
     echo "   git commit -a"
     echo "   git push -u origin master"
-    echo "   /root/jh/bin/deploy-poltergeist.sh"
+    echo "   ./deploy.sh"
     exit 0
 fi
 
@@ -47,8 +47,8 @@ if [ $? -ne 0 ] ; then
     echo "Error committing changes.  Please do the following steps manually:"
     echo "   git commit -a"
     echo "   git push -u origin master"
-    echo "   /root/jh/bin/deploy-poltergeist.sh"
+    echo "   ./deploy.sh"
     exit 1
 fi
 git push -u origin master
-/root/jh/bin/deploy-poltergeist.sh
+./deploy.sh
