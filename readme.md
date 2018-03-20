@@ -29,10 +29,10 @@ vi config-local.conf
     $ ./addsite.sh
     Enter site name: newsite
     Enter page title: New Title!
-    Do you have any customizations to make before commit/push? [y/N]:
+    Do you have any customizations to make before commit/push/deploy? [y/N]:
     ```
 5. If you want to make any further customizations to make before committing (eg. any special logic in the `index.php` or something), enter `y`, make those changes, then commit, push, deploy (see below).
-6. If you have no further customizations to make, enter `n` and the script will automatically commit, push, and deploy the code to the Raspberry Pis.
+6. If you have no further customizations to make, enter `n` and the script will automatically commit, push, and deploy the code to your configured device(s) (eg. the raspberry pis).
 
 **NOTE:** The `deploy.sh` script uses SSH to deploy the code to any remote device(s), so you will either need to have SSH key auth set up, or type in the SSH password for your current user (key auth is highly recommended).
 
@@ -43,6 +43,6 @@ If you had additional customizations to be made before committing in the steps a
 ```
 git add .
 git commit -a
-git push -u origin master
+git push -u origin
 ./deploy.sh
 ```
