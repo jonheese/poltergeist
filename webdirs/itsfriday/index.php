@@ -4,6 +4,7 @@
 	</head>
 	<body>
 <?php
+if ($_SERVER["REQUEST_METHOD"] != "GET") die();
 $day = date('l');
 if ( $day == "Friday" ) {
     exec('/usr/bin/play /var/www/itsfriday/itsfriday.mp3 pad 30000s@0:00 >/dev/null 2>&1 &');

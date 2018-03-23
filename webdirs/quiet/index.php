@@ -6,6 +6,7 @@
 	<body>
 		<p align="center"><img height='100%' src='stahp.jpg' /></p>
 <?php
+if ($_SERVER["REQUEST_METHOD"] != "GET") die();
 exec('/usr/bin/killall play >/dev/null 2>&1 &');
 ?>
 	</body>

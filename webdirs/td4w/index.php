@@ -5,6 +5,7 @@
 	</head>
 	<body>
 <?php
+if ($_SERVER["REQUEST_METHOD"] != "GET") die();
 #$ip = $_SERVER['REMOTE_ADDR'];
 #if ($ip == "10.156.88.234" || $ip == "10.156.88.226" || $ip == "10.156.88.212") {
 	print "<p align='center'><img src='td4w.jpg' /></p>";

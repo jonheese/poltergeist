@@ -11,6 +11,7 @@
 			</table>
 		</form>
 <?php
+if ($_SERVER["REQUEST_METHOD"] != "GET") die();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$text = $_POST['text'];
 	exec("/usr/bin/speech.sh \"$text\" &");
