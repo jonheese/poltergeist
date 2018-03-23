@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Jobey, That's the Nastiest Thing I Ever Seen You Do!</title>
+		<title>Jobey, That's the Nastiest Thing!</title>
 	</head>
 	<body>
 <!--		<p align="center"><img src='@imgfile@' /></p>-->
