@@ -5,7 +5,7 @@ read site_name
 echo -n "Enter page title: "
 read page_title
 
-if [ -n "$sitename" ] ; then
+if [ -n "$site_name" ] ; then
     mkdir webdirs/$site_name
     cp webdirs/index.php.template webdirs/$site_name/index.php
     sed -i "s/@site@/$site_name/g" webdirs/${site_name}/index.php
