@@ -87,7 +87,7 @@ function deploy() {
 }
 
 source config-local.conf
-if [ $LOCAL -eq 1 ] ; then
+if [ "$LOCAL" -eq 1 ] ; then
     deploy
 fi
 for DEVICE in $DEVICES ; do
