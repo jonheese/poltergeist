@@ -1,4 +1,4 @@
-import json, uuid
+import json, uuid, time
 from redis import Redis
 from flask import Flask, request, jsonify
 
@@ -13,14 +13,16 @@ def get_commands(client_id):
     target_key = '%s:clip:%s' % (qkey, client_id)
     clips = []
     quiet = False
-    for key in redis.scan_iter(target_key+":*"):
-        clip = redis.get(key)
-        if quiet or clip == "quiet":
-            quiet = True
-            clips = [ "quiet" ]
-        else:
-            clips.append(clip)
-        redis.delete(key)
+    start_time = time.time()
+    while len(clips) == 0 and time.time() - start_time < 30:
+        for key in redis.scan_iter(target_key+":*"):
+            clip = redis.get(key)
+            if quiet or clip == "quiet":
+                quiet = True
+                clips = [ "quiet" ]
+            else:
+                clips.append(clip)
+            redis.delete(key)
     return jsonify(clips = clips)
 
 
