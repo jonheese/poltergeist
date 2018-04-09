@@ -1,7 +1,10 @@
 {
     "server" : "localhost",
     "port": 80,
-    "client_id": "[hostname]",
+    "client_id": "<hostname>",
     "clip_dir": "/var/www",
-    "play_cmd": "/usr/bin/play"
+    "play_cmd": "/usr/bin/play",
+    "play_options": "pad 30000s@0:00",
+    "debug": false,
+    "quiet": false
 }
