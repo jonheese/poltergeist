@@ -14,7 +14,7 @@ def get_commands(client_id):
     clips = []
     quiet = False
     start_time = time.time()
-    while len(clips) == 0 and time.time() - start_time < 30:
+    while len(clips) == 0:
         for key in redis.scan_iter(target_key+":*"):
             clip = redis.get(key)
             if quiet or clip == "quiet":
@@ -23,7 +23,8 @@ def get_commands(client_id):
             else:
                 clips.append(clip)
             redis.delete(key)
-    return jsonify(clips = clips)
+        time.sleep(0.1)
+    return json.dumps({"clips": clips})
 
 
 @app.route('/', methods=['GET'])
