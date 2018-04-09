@@ -1,0 +1,13 @@
+[Unit]
+Description=Poltergeist Client
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/poltergeist/client
+ExecStart=/usr/bin/python /root/poltergeist/client/client.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
