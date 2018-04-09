@@ -2,12 +2,7 @@ import requests, json, os.path, sys, time, thread, Queue, glob, random
 from subprocess import call, check_output
 
 
-def check_for_command(response, **kwargs):
-    data = json.loads(response.text)
-    thread.start_new_thread(do_check_for_command, (data,))
-
-
-def do_check_for_command(data):
+def do_command(data):
     global clip_dir, play_cmd, quiet_queue, debug, quiet
     if debug:
         print json.dumps(data, indent=2)
@@ -35,7 +30,7 @@ def do_check_for_command(data):
                     print "Couldn't find directory %s/%s" % (clip_dir, clip)
 
 
-def process_clip_queue(dummy):
+def process_quiet_queue(dummy):
     global clip_dir, play_cmd, quiet_queue, debug, quiet
     try:
         while True:
@@ -49,9 +44,10 @@ def process_clip_queue(dummy):
                         # We don't care if the killall command fails
                         print e
                         pass
+            time.sleep(0.1)
     except Exception as e:
         if not quiet:
-            print "Encountered exception in process_clip_queue:"
+            print "Encountered exception in process_quiet_queue:"
             print e
 
 
@@ -70,14 +66,17 @@ debug = bool(config["debug"]) if "debug" in config.keys() else False
 quiet = bool(config["quiet"]) if "quiet" in config.keys() else False
 
 quiet_queue = Queue.Queue()
-
-thread.start_new_thread(process_clip_queue, (None,))
+thread.start_new_thread(process_quiet_queue, (None,))
 
 while True:
     try:
         if not quiet:
             print "Connecting to %s on port %s as client_id %s" % (server, port, client_id)
-        requests.get("http://%s:%s/cmd/%s" % (server, port, client_id), hooks={'response':check_for_command})
+        r = requests.get("http://%s:%s/cmd/%s" % (server, port, client_id), stream=True)
+        for json_data in r.iter_lines():
+            if json_data:
+                print json.dumps(json.loads(json_data), indent=2)
+                thread.start_new_thread(do_command, (json.loads(json_data),))
     except KeyboardInterrupt:
         if not quiet:
             print "Received CTRL-C, exiting..."
