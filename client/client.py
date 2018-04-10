@@ -3,8 +3,8 @@ from subprocess import call, check_output
 
 
 def do_command(data):
-    global clip_dir, play_cmd, quiet_queue, debug, quiet
-    if debug:
+    global clip_dir, play_cmd, quiet_queue, verbosity
+    if verbosity > 1:
         print json.dumps(data, indent=2)
     if "clips" in data.keys():
         for clip in data["clips"]:
@@ -12,30 +12,32 @@ def do_command(data):
                 quiet_queue.put(clip)
                 print "Put %s in the queue" % clip
             else:
-                if debug:
+                if verbosity > 1:
                     print "clip %s command received" % clip
                 if os.path.isdir("%s/%s" % (clip_dir, clip)):
                     clip_file = "%s/%s/%s.mp3" % (clip_dir, clip, clip)
                     if not os.path.exists(clip_file):
-                        if debug:
+                        if verbosity > 1:
                             print "Is directory"
                         clips = glob.glob("%s/%s/%s*.mp3" % (clip_dir, clip, clip))
                         clip_file = clips[random.randint(0, len(clips)-1)]
-                    elif debug:
+                    elif verbosity > 1:
                         print "Is file"
-                    if not quiet:
+                    if verbosity > 0:
                         print "Playing %s" % clip_file
                     call("%s %s %s >/dev/null 2>&1" % (play_cmd, clip_file, play_options), shell=True)
-                elif debug:
+                elif verbosity > 1:
                     print "Couldn't find directory %s/%s" % (clip_dir, clip)
 
 
 def process_quiet_queue(dummy):
-    global clip_dir, play_cmd, quiet_queue, debug, quiet
+    global clip_dir, play_cmd, quiet_queue, verbosity
+    if verbosity > 1:
+        print "Starting up quiet queue"
     try:
         while True:
             while not quiet_queue.empty():
-                    if not quiet:
+                    if verbosity > 0:
                         print "Killing all sounds"
                     try:
                         call(["killall", "play"])
@@ -46,7 +48,7 @@ def process_quiet_queue(dummy):
                         pass
             time.sleep(0.1)
     except Exception as e:
-        if not quiet:
+        if verbosity > 0:
             print "Encountered exception in process_quiet_queue:"
             print e
 
@@ -63,27 +65,33 @@ client_id = config["client_id"] if "client_id" in config else check_output("host
 clip_dir = config["clip_dir"] if "clip_dir" in config.keys() else "/var/www"
 play_cmd = config["play_cmd"] if "play_cmd" in config.keys() else "/usr/bin/play"
 play_options = config["play_options"] if "play_options" in config.keys() else "pad 30000s@0:00"
-debug = bool(config["debug"]) if "debug" in config.keys() else False
-quiet = bool(config["quiet"]) if "quiet" in config.keys() else False
+verbosity = int(config["verbosity"]) if "verbosity" in config.keys() else 1
+if "debug" in config.keys() and bool(config["debug"]):
+    verbosity = 2
+if "quiet" in config.keys() and bool(config["quiet"]):
+    verbosity = 0
 
 quiet_queue = Queue.Queue()
 thread.start_new_thread(process_quiet_queue, (None,))
 
 while True:
     try:
-        if not quiet:
+        if verbosity > 0:
+            print "Verbosity set to %s" % verbosity
             print "Connecting to %s on port %s as client_id %s" % (server, port, client_id)
         r = requests.get("%s://%s:%s/cmd/%s" % (schema, server, port, client_id), stream=True)
+        if verbosity > 0:
+            print "Connected"
         for json_data in r.iter_lines():
             if json_data:
                 print json.dumps(json.loads(json_data), indent=2)
-                thread.start_new_thread(do_command, (json.loads(json_data),))
+                do_command(json.loads(json_data))
     except KeyboardInterrupt:
-        if not quiet:
+        if verbosity > 0:
             print "Received CTRL-C, exiting..."
         sys.exit(0)
     except Exception as e:
-        if not quiet:
+        if verbosity > 0:
             print "Received unexpected exception:"
             print e
             print "Reconnecting in 5 seconds..."
