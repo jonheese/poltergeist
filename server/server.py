@@ -23,7 +23,7 @@ def get_commands(client_id):
             else:
                 clips.append(clip)
             redis.delete(key)
-        time.sleep(0.1)
+        time.sleep(0.05)
     return json.dumps({"clips": clips})
 
 
@@ -40,3 +40,34 @@ def submit_command():
     clip_name = domain.split(".")[0]
     redis.set(target_key, clip_name)
     return jsonify(status = "Request to play %s on %s successfully queued" % (clip_name, client_id))
+
+
+@app.route('/alexa', methods=['POST'])
+def handle_alexa_request():
+    print json.dumps(request.json, indent=2)
+    return generate_response("Okay")
+
+
+def generate_response(output_speech, card_title="", card_subtitle="", card_content="", endSession=True):
+    response = {
+        "version": "1.0",
+        "sessionAttributes": {
+            "user": {
+                "name": "Jon Heese"
+            }
+        },
+        "response": {
+            "outputSpeech": {
+                "type": "PlainText",
+                "text": output_speech
+            },
+            "card": {
+                "type": "Simple",
+                "title": card_title,
+                "subtitle": card_subtitle,
+                "content": card_content
+            },
+            "shouldEndSession": endSession
+        }
+    }
+    return json.dumps(response)
