@@ -56,6 +56,7 @@ if not os.path.isfile('config.json'):
     sys.exit(1)
 
 config = json.load(open('config.json'))
+schema = config["schema"] if "schema" in config.keys() else "http"
 server = config["server"] if "server" in config.keys() else "localhost"
 port = config["port"] if "port" in config.keys() else 80
 client_id = config["client_id"] if "client_id" in config else check_output("hostname")
@@ -72,7 +73,7 @@ while True:
     try:
         if not quiet:
             print "Connecting to %s on port %s as client_id %s" % (server, port, client_id)
-        r = requests.get("http://%s:%s/cmd/%s" % (server, port, client_id), stream=True)
+        r = requests.get("%s://%s:%s/cmd/%s" % (schema, server, port, client_id), stream=True)
         for json_data in r.iter_lines():
             if json_data:
                 print json.dumps(json.loads(json_data), indent=2)
