@@ -1,11 +1,11 @@
 #!/bin/bash
 
-systemctl=$(which systemctl >/dev/null 2>&1)
+systemctl=$(which systemctl 2>/dev/null)
 dirname=$(readlink -f $(dirname $0))
 
 if [ ! -f "$systemctl" ] ; then
     echo "Sorry, this install script only works on SystemD-based machines."
-#    exit 1
+    exit 1
 fi
 
 cp $dirname/poltergeist-client.service /lib/systemd/system/
