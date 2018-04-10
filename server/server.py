@@ -30,22 +30,33 @@ def get_commands(client_id):
 @app.route('/', methods=['GET'])
 def submit_command():
     domain = request.headers['Host']
-    if domain.endswith("tv.inetu.org"):
+    if domain.endswith("inetu.org"):
         client_id = "inetu-hdmi19"
-    elif domain.endswith("tv.inetu.net"):
+    elif domain.endswith("inetu.net"):
         client_id = "inetu-hdmi13"
     else:
         return jsonify(status = "I couldn't find the client_id for the URL you requested"), 404
-    target_key = '%s:clip:%s:%s' % (qkey, client_id, uuid.uuid4())
     clip_name = domain.split(".")[0]
-    redis.set(target_key, clip_name)
+    put_command(client_id, clip_name)
     return jsonify(status = "Request to play %s on %s successfully queued" % (clip_name, client_id))
+
+
+def put_command(client_id, clip_name):
+    target_key = '%s:clip:%s:%s' % (qkey, client_id, uuid.uuid4())
+    redis.set(target_key, clip_name)
 
 
 @app.route('/alexa', methods=['POST'])
 def handle_alexa_request():
     print json.dumps(request.json, indent=2)
-    return generate_response("Okay")
+    data = request.json
+    request_type = data["request"]["type"]
+    if request_type == "IntentRequest":
+        clip_name = data["request"]["intent"]["slots"]["clip"]["value"].replace(" ", "").lower()
+        put_command("inetu-hdmi19", clip_name)
+        return generate_response("Okay")
+    else:
+        return generate_response("I couldn't find that clip")
 
 
 def generate_response(output_speech, card_title="", card_subtitle="", card_content="", endSession=True):
