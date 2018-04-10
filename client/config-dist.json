@@ -1,4 +1,5 @@
 {
+    "schema" : "http",
     "server" : "localhost",
     "port": 80,
     "client_id": "<hostname>",
