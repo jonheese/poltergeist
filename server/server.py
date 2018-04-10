@@ -14,7 +14,7 @@ def get_commands(client_id):
     clips = []
     quiet = False
     start_time = time.time()
-    while len(clips) == 0:
+    while len(clips) == 0 and time.time() - start_time < 600:
         for key in redis.scan_iter(target_key+":*"):
             clip = redis.get(key)
             if quiet or clip == "quiet":
