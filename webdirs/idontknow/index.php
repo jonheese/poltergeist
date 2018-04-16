@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>I don't know that shit!</title>
+		<title>I don't know</title>
 	</head>
 	<body>
 <?php
