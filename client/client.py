@@ -85,7 +85,7 @@ while True:
         for json_data in r.iter_lines():
             if json_data:
                 print json.dumps(json.loads(json_data), indent=2)
-                do_command(json.loads(json_data))
+                thread.start_new_thread(do_command, (json.loads(json_data),))
     except KeyboardInterrupt:
         if verbosity > 0:
             print "Received CTRL-C, exiting..."
