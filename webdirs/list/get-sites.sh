@@ -23,14 +23,14 @@ for root_site in $root_sites; do
 	indent=""
 	is_my_site $root_site
 	[ -n "$hostname_found" ] && sites=$(printf "%s\n@%s" "$sites" "$root_site") && indent="&nbsp;&nbsp;&nbsp;"
-#	possible_aliases=$(echo "$all_sites" | grep -A99 $root_site | tail -n+2)
-#	for possible_alias in $possible_aliases ; do
-#		namevhost_found=$(echo "$possible_alias" | grep "namevhost")
-#		[ -n "$namevhost_found" ] && break
-#		alias=$(echo "$possible_alias" | awk '{print $2}')
-#		is_my_site $alias
-#		[ -n "$hostname_found" ] && sites=$(printf "%s\n%s@%s" "$sites" "$indent" "$alias") && indent="&nbsp;&nbsp;&nbsp;"
-#	done
+	possible_aliases=$(echo "$all_sites" | grep -A99 $root_site | tail -n+2)
+    for possible_alias in $possible_aliases ; do
+		namevhost_found=$(echo "$possible_alias" | grep "namevhost")
+		[ -n "$namevhost_found" ] && break
+		alias=$(echo "$possible_alias" | awk '{print $2}')
+		is_my_site $alias
+		[ -n "$hostname_found" ] && sites=$(printf "%s\n%s@%s" "$sites" "$indent" "$alias") && indent="&nbsp;&nbsp;&nbsp;"
+	done
 done
 
 for site in $sites ; do
