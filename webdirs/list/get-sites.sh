@@ -19,22 +19,33 @@ function is_my_site {
 	done
 }
 
+echo "<html>"
+echo "<body>"
+
 for root_site in $root_sites; do
 	indent=""
 	is_my_site $root_site
-	[ -n "$hostname_found" ] && sites=$(printf "%s\n@%s" "$sites" "$root_site") && indent="&nbsp;&nbsp;&nbsp;"
+	[ -n "$hostname_found" ] && sites=$(printf "%s\n@%s" "$sites" "$root_site") && indent="###"
 	possible_aliases=$(echo "$all_sites" | grep -A99 $root_site | tail -n+2)
     for possible_alias in $possible_aliases ; do
 		namevhost_found=$(echo "$possible_alias" | grep "namevhost")
 		[ -n "$namevhost_found" ] && break
 		alias=$(echo "$possible_alias" | awk '{print $2}')
 		is_my_site $alias
-		[ -n "$hostname_found" ] && sites=$(printf "%s\n%s@%s" "$sites" "$indent" "$alias") && indent="&nbsp;&nbsp;&nbsp;"
+		[ -n "$hostname_found" ] && sites=$(printf "%s\n%s@%s" "$sites" "$indent" "$alias") && indent="###"
 	done
 done
 
 for site in $sites ; do
 	raw_site="$site"
 	site=$(echo "$site" | sed 's/&nbsp;//g')
-	echo "<a href=\"$site\">$raw_site</a><br />" | sed 's/\@/http:\/\//g'
+    echo "$site" | grep "###" >/dev/null 2>&1
+    if [ $? -eq 0 ] ; then
+    	echo "&nbsp;&nbsp;&nbsp;<a href=\"$site\">$raw_site</a><br />" | sed 's/\@/http:\/\//g' | sed 's/\#\#\#//g'
+    else
+    	echo "<a href=\"$site\">$raw_site</a><br />" | sed 's/\@/http:\/\//g'
+    fi
 done
+
+echo "</body>"
+echo "</html>"
