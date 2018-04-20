@@ -6,7 +6,10 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/root/poltergeist/client
-ExecStart=/usr/bin/python /root/poltergeist/client/client.py
+ExecStart=/usr/bin/python -u /root/poltergeist/client/client.py
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=poltergeist
 Restart=on-abort
 
 [Install]
