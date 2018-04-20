@@ -4,6 +4,7 @@ from subprocess import call, check_output
 
 def do_command(data):
     global clip_dir, play_cmd, quiet_queue, verbosity
+    clip_played = False
     if verbosity > 1:
         print json.dumps(data, indent=2)
     if "clips" in data.keys():
@@ -26,8 +27,24 @@ def do_command(data):
                     if verbosity > 0:
                         print "Playing %s" % clip_file
                     call("%s %s %s >/dev/null 2>&1" % (play_cmd, clip_file, play_options), shell=True)
-                elif verbosity > 1:
-                    print "Couldn't find directory %s/%s" % (clip_dir, clip)
+                else:
+                    if verbosity > 1:
+                        print "Couldn't find directory %s/%s" % (clip_dir, clip)
+                    for file_name in glob.glob("/etc/apache2/sites-enabled/*.conf"):
+                        with open(file_name) as f:
+                            contents = f.read()
+                        for line in contents.splitlines():
+                            if 'ServerAlias' in line:
+                                alias = line.split(" ")[1]
+                                if alias.split(".")[0] == clip:
+                                    actual_clip = file_name.split("/")[-1].split(".")[0]
+                                    clip_file = "%s/%s/%s.mp3" % (clip_dir, actual_clip, actual_clip)
+                                    print "Playing alias %s" % clip
+                                    call("%s %s %s >/dev/null 2>&1" % (play_cmd, clip_file, play_options), shell=True)
+                                    clip_played = True
+                                    break
+                    if not clip_played:
+                        print "Couldn't find site for clip %s" % clip
 
 
 def process_quiet_queue(dummy):
