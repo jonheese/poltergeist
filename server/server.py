@@ -1,6 +1,7 @@
 import json, uuid, time
 from redis import Redis
 from flask import Flask, request, jsonify
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -37,6 +38,10 @@ def submit_command():
     else:
         return jsonify(status = "I couldn't find the client_id for the URL you requested"), 404
     clip_name = domain.split(".")[0]
+
+    if (clip_name.lower() == "friday" and datetime.today().weekday() != 4) or
+            (clip_name.lower() == "lastchristmas" and datetime.today().month() != 12):
+        return '<html><body><img src="/static/stahp.jpg" /></body></html>'
     put_command(client_id, clip_name)
     return jsonify(status = "Request to play %s on %s successfully queued" % (clip_name, client_id))
 
