@@ -39,9 +39,9 @@ def submit_command():
         return jsonify(status = "I couldn't find the client_id for the URL you requested"), 404
     clip_name = domain.split(".")[0]
 
-    if (clip_name.lower() == "friday" and datetime.today().weekday() != 4) or
-            (clip_name.lower() == "lastchristmas" and datetime.today().month() != 12):
-        return '<html><body><img src="/static/stahp.jpg" /></body></html>'
+    if (clip_name.lower() == "friday" and datetime.today().weekday() != 4) or \
+            (clip_name.lower() == "lastchristmas" and datetime.today().month != 12):
+        return '<html><body><p align="center"><img src="/static/stahp.jpg" /></p></body></html>'
     put_command(client_id, clip_name)
     return jsonify(status = "Request to play %s on %s successfully queued" % (clip_name, client_id))
 
