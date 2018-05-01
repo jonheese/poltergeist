@@ -28,8 +28,17 @@ def get_commands(client_id):
     return json.dumps({"clips": clips})
 
 
+@app.route('/monitor', methods=['GET'])
+def monitor():
+    return "Success"
+
+
 @app.route('/', methods=['GET'])
 def submit_command():
+    user_agent = request.headers['User-Agent'].lower()
+    if "bot" in user_agent:
+        return ""
+
     domain = request.headers['Host']
     if domain.endswith("inetu.org"):
         client_id = "inetu-hdmi19"
