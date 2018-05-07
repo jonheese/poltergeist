@@ -28,8 +28,17 @@ def get_commands(client_id):
     return json.dumps({"clips": clips})
 
 
+@app.route('/monitor', methods=['GET'])
+def monitor():
+    return "Success"
+
+
 @app.route('/', methods=['GET'])
 def submit_command():
+    user_agent = request.headers['User-Agent'].lower()
+    if "bot" in user_agent:
+        return ""
+
     domain = request.headers['Host']
     if domain.endswith("inetu.org"):
         client_id = "inetu-hdmi19"
@@ -40,7 +49,8 @@ def submit_command():
     clip_name = domain.split(".")[0]
 
     if (clip_name.lower() == "friday" and datetime.today().weekday() != 4) or \
-            (clip_name.lower() == "lastchristmas" and datetime.today().month != 12):
+            (clip_name.lower() == "lastchristmas" and datetime.today().month != 12) or \
+            (clip_name.lower() == "jinglebell" and datetime.today().month != 12):
         return '<html><body><p align="center"><img src="/static/stahp.jpg" /></p></body></html>'
     put_command(client_id, clip_name)
     return jsonify(status = "Request to play %s on %s successfully queued" % (clip_name, client_id))
