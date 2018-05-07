@@ -28,6 +28,7 @@ function deploy() {
     do_cmd rm -f /root/speech.sh
     do_cmd ln -s /usr/bin/speech.sh /root/speech.sh
     do_cmd touch /var/log/speech.log
+    do_cmd ln -s /usr/bin/play /usr/bin/play-unkillable 2>/dev/null
     do_cmd chown www-data:www-data /var/log/speech.log
 
     echo ""

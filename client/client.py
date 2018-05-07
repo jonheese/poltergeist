@@ -39,8 +39,11 @@ def do_command(data):
                                 if alias.split(".")[0] == clip:
                                     actual_clip = file_name.split("/")[-1].split(".")[0]
                                     clip_file = "%s/%s/%s.mp3" % (clip_dir, actual_clip, actual_clip)
-                                    print "Playing alias %s" % clip
-                                    call("%s %s %s >/dev/null 2>&1" % (play_cmd, clip_file, play_options), shell=True)
+                                    if clip == "inagaddadavida":
+                                        actual_play_cmd = play-unkillable_cmd
+                                    else:
+                                        actual_play_cmd = play_cmd
+                                    call("%s %s %s >/dev/null 2>&1" % (actual_play_cmd, clip_file, play_options), shell=True)
                                     clip_played = True
                                     break
                     if not clip_played:
@@ -48,7 +51,7 @@ def do_command(data):
 
 
 def process_quiet_queue(dummy):
-    global clip_dir, play_cmd, quiet_queue, verbosity
+    global clip_dir, quiet_queue, verbosity
     if verbosity > 1:
         print "Starting up quiet queue"
     try:
@@ -81,6 +84,7 @@ port = config["port"] if "port" in config.keys() else 80
 client_id = config["client_id"] if "client_id" in config else check_output("hostname")
 clip_dir = config["clip_dir"] if "clip_dir" in config.keys() else "/var/www"
 play_cmd = config["play_cmd"] if "play_cmd" in config.keys() else "/usr/bin/play"
+play-unkillable_cmd = config["play-unkillable_cmd"] if "play-unkillable_cmd" in config.keys() else "/usr/bin/play-unkillable"
 play_options = config["play_options"] if "play_options" in config.keys() else "pad 30000s@0:00"
 verbosity = int(config["verbosity"]) if "verbosity" in config.keys() else 1
 if "debug" in config.keys() and bool(config["debug"]):
