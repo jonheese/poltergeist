@@ -1,6 +1,6 @@
 import json, uuid, time
 from redis import Redis
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from datetime import datetime
 
 app = Flask(__name__)
@@ -53,7 +53,10 @@ def submit_command():
             (clip_name.lower() == "jinglebell" and datetime.today().month != 12):
         return '<html><body><p align="center"><img src="/static/stahp.jpg" /></p></body></html>'
     put_command(client_id, clip_name)
-    return jsonify(status = "Request to play %s on %s successfully queued" % (clip_name, client_id))
+
+    return render_template('%s/index.html' % clip_name)
+    #return urllib2.urlopen("http://tv-static.inetu.org/%s" % clip_name).read()
+    #return jsonify(status = "Request to play %s on %s successfully queued" % (clip_name, client_id))
 
 
 def put_command(client_id, clip_name):
