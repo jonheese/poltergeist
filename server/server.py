@@ -9,6 +9,7 @@ redis = Redis()
 app.config['REDIS_QUEUE_KEY'] = 'poltergeist'
 qkey = app.config['REDIS_QUEUE_KEY']
 
+
 @app.route('/cmd/<client_id>', methods=['GET'])
 def get_commands(client_id):
     target_key = '%s:clip:%s' % (qkey, client_id)
@@ -33,24 +34,30 @@ def monitor():
     return "Success"
 
 
+@app.route('/play/<clip_name>', methods=['GET'])
 @app.route('/', methods=['GET'])
-def submit_command():
-    user_agent = request.headers['User-Agent'].lower()
-    if "bot" in user_agent:
+def submit_command(clip_name=None):
+    try:
+        user_agent = request.headers['User-Agent'].lower()
+        if "bot" in user_agent and not user_agent.startswith("slackbot"):
+            return ""
+    except KeyError:
         return ""
 
     domain = request.headers['Host']
-    if domain.endswith("inetu.org"):
-        client_id = "inetu-hdmi19"
-    elif domain.endswith("inetu.net"):
+    if domain.endswith("inetu.net"):
         client_id = "inetu-hdmi13"
+    elif domain.endswith("inetu.org") or domain.endswith("jonheese.com"):
+        client_id = "inetu-hdmi19"
     else:
         return jsonify(status = "I couldn't find the client_id for the URL you requested"), 404
-    clip_name = domain.split(".")[0]
+
+    if not clip_name:
+        clip_name = domain.split(".")[0]
 
     if (clip_name.lower() == "friday" and datetime.today().weekday() != 4) or \
-            (clip_name.lower() == "lastchristmas" and datetime.today().month != 12) or \
-            (clip_name.lower() == "jinglebell" and datetime.today().month != 12):
+            ((clip_name.lower() == "lastchristmas" or clip_name.lower() == "jinglebell") and \
+            datetime.today().month != 12):
         return '<html><body><p align="center"><img src="/static/stahp.jpg" /></p></body></html>'
     put_command(client_id, clip_name)
 
