@@ -15,6 +15,7 @@ def get_commands(client_id):
     target_key = '%s:clip:%s' % (qkey, client_id)
     clips = []
     quiet = False
+    quiet_all = False
     start_time = time.time()
     while len(clips) == 0 and time.time() - start_time < 600:
         for key in redis.scan_iter(target_key+":*"):
@@ -22,6 +23,9 @@ def get_commands(client_id):
             if quiet or clip == "quiet":
                 quiet = True
                 clips = [ "quiet" ]
+            elif quiet_all or clip == "quiet_all":
+                quiet_all = True
+                clips = [ "quiet_all" ]
             else:
                 clips.append(clip)
             redis.delete(key)
@@ -61,7 +65,10 @@ def submit_command(clip_name=None):
         return '<html><body><p align="center"><img src="/static/stahp.jpg" /></p></body></html>'
     put_command(client_id, clip_name)
 
-    return render_template('%s/index.html' % clip_name)
+    try:
+        return render_template('%s/index.html' % clip_name)
+    except TemplateNotFound:
+        return render_template("notfound.html")
     #return urllib2.urlopen("http://tv-static.inetu.org/%s" % clip_name).read()
     #return jsonify(status = "Request to play %s on %s successfully queued" % (clip_name, client_id))
 

@@ -9,7 +9,7 @@ def do_command(data):
         print json.dumps(data, indent=2)
     if "clips" in data.keys():
         for clip in data["clips"]:
-            if clip == "quiet":
+            if clip == "quiet" or clip == "quiet_all":
                 quiet_queue.put(clip)
                 print "Put %s in the queue" % clip
             else:
@@ -60,8 +60,10 @@ def process_quiet_queue(dummy):
                     if verbosity > 0:
                         print "Killing all sounds"
                     try:
+                        clip = quiet_queue.get()
+                        if clip == "quiet_all":
+                            call(["killall", "play-unkillable"])
                         call(["killall", "play"])
-                        quiet_queue.get()
                     except OSError as e:
                         # We don't care if the killall command fails
                         print e
