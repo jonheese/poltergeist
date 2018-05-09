@@ -18,9 +18,9 @@ function deploy() {
     fi
 
     echo "Copying files${tostring}..."
-    rsync -av apache-confs/* ${dest}/etc/apache2/sites-available/
-    rsync -av webdirs/* ${dest}/var/www/
-    rsync -av speech.sh ${dest}/usr/bin/
+    rsync -av apache-confs/* ${dest}/etc/apache2/sites-available/ 2>&1 >/dev/null
+    rsync -av webdirs/* ${dest}/var/www/ 2>&1 >/dev/null
+    rsync -av speech.sh ${dest}/usr/bin/ 2>&1 >/dev/null
     do_cmd /root/poltergeist/misc_setup.sh
 
     echo ""
@@ -42,7 +42,7 @@ function deploy() {
 
     echo ""
     echo "Copying poltercron to /etc/cron.d${onstring}..."
-    rsync -av poltercron ${dest}/etc/cron.d/
+    rsync -av poltercron ${dest}/etc/cron.d/ 2>&1 >/dev/null
 
     echo ""
     echo "Enabling sites${onstring}..."
@@ -72,17 +72,13 @@ function deploy() {
         done
     fi
 
-    echo "Disabling PHP safe_mode${onstring}..."
-    rsync -av disable_php_safe_mode.sh ${dest}/root/
-    do_cmd /root/disable_php_safe_mode.sh
-
     if [ $error -eq 0 ] ; then
-    	do_cmd service apache2 reload
     	do_cmd systemctl daemon-reload
-    	[ $? -ne 0 ] && echo "Error reloading apache2 service!" && return 1
-    	echo "Sites successfully deployed${tostring}!"
+    	do_cmd systemctl restart poltergeist-client
+    	[ $? -ne 0 ] && echo "Error reloading poltergeist-client service!" && return 1
+    	echo "Poltergeist client successfully deployed${tostring}!"
     else
-    	echo "Sites not deployed${tostring}!"
+    	echo "Poltergeist client not deployed${tostring}!"
     fi
     echo ""
 }

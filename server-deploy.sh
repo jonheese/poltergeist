@@ -24,8 +24,8 @@ function deploy() {
     do_cmd mkdir -p /var/www/poltergeist/static
     do_cmd mkdir -p /var/www/poltergeist/templates
     do_cmd mkdir -p /opt/poltergeist
-    rsync -av /root/poltergeist/* /opt/poltergeist/
-    rsync -av /root/poltergeist/server/server.py /var/www/poltergeist/
+    rsync -av $POLTERGEIST_DIR/* /opt/poltergeist/ 2>&1 >/dev/null
+    rsync -av $POLTERGEIST_DIR/server/server.py /var/www/poltergeist/ 2>&1 >/dev/null
 
     echo "Symlinking files${tostring}..."
     do_cmd ln -s /opt/poltergeist/webdirs/* /var/www/poltergeist/static/ 2>/dev/null
@@ -33,8 +33,12 @@ function deploy() {
 
     echo "Chowning directories${onstring}..."
     do_cmd chown -R www-data:www-data /var/www/poltergeist/
+
+    echo "Restarting apache2 service${onstring}..."
+    do_cmd systemctl restart apache2
 }
 
+POLTERGEIST_DIR="/root/poltergeist"
 source config-local.conf
 if [ "$LOCAL" -eq 1 ] ; then
     deploy
