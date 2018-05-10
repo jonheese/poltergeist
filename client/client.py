@@ -77,30 +77,34 @@ def process_quiet_queue(dummy):
             print e
 
 
-if not os.path.isfile('config.json'):
-    print "You must configure config.py -- see config-dist.json for an example"
-    sys.exit(1)
+def get_config():
+    if not os.path.isfile('config.json'):
+        print "You must configure config.py -- see config-dist.json for an example"
+        sys.exit(1)
 
-config = json.load(open('config.json'))
-schema = config["schema"] if "schema" in config.keys() else "http"
-server = config["server"] if "server" in config.keys() else "localhost"
-port = config["port"] if "port" in config.keys() else 80
-client_id = config["client_id"] if "client_id" in config else check_output("hostname")
-clip_dir = config["clip_dir"] if "clip_dir" in config.keys() else "/var/www"
-play_cmd = config["play_cmd"] if "play_cmd" in config.keys() else "/usr/bin/play"
-play_unkillable_cmd = config["play_unkillable_cmd"] if "play_unkillable_cmd" in config.keys() else "/usr/bin/play-unkillable"
-play_options = config["play_options"] if "play_options" in config.keys() else "pad 30000s@0:00"
-verbosity = int(config["verbosity"]) if "verbosity" in config.keys() else 1
-if "debug" in config.keys() and bool(config["debug"]):
-    verbosity = 2
-if "quiet" in config.keys() and bool(config["quiet"]):
-    verbosity = 0
+    global config, schema, server, port, client_id, clip_dir, play_cmd, play_unkillable_cmd, play_options, verbosity
+    config = json.load(open('config.json'))
+    schema = config["schema"] if "schema" in config.keys() else "http"
+    server = config["server"] if "server" in config.keys() else "localhost"
+    port = config["port"] if "port" in config.keys() else 80
+    client_id = config["client_id"] if "client_id" in config else check_output("hostname")
+    clip_dir = config["clip_dir"] if "clip_dir" in config.keys() else "/var/www"
+    play_cmd = config["play_cmd"] if "play_cmd" in config.keys() else "/usr/bin/play"
+    play_unkillable_cmd = config["play_unkillable_cmd"] if "play_unkillable_cmd" in config.keys() else "/usr/bin/play-unkillable"
+    play_options = config["play_options"] if "play_options" in config.keys() else "pad 30000s@0:00"
+    verbosity = int(config["verbosity"]) if "verbosity" in config.keys() else 1
+    if "debug" in config.keys() and bool(config["debug"]):
+        verbosity = 2
+    if "quiet" in config.keys() and bool(config["quiet"]):
+        verbosity = 0
+
 
 quiet_queue = Queue.Queue()
 thread.start_new_thread(process_quiet_queue, (None,))
 
 while True:
     try:
+        get_config()
         if verbosity > 0:
             print "Verbosity set to %s" % verbosity
             print "Connecting to %s on port %s as client_id %s" % (server, port, client_id)
