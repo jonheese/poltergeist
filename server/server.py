@@ -1,6 +1,7 @@
 import json, uuid, time
 from redis import Redis
 from flask import Flask, request, jsonify, render_template
+from jinja2 import TemplateNotFound
 from datetime import datetime
 
 app = Flask(__name__)

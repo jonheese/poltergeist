@@ -21,6 +21,7 @@ function deploy() {
     rsync -av apache-confs/* ${dest}/etc/apache2/sites-available/ 2>&1 >/dev/null
     rsync -av webdirs/* ${dest}/var/www/ 2>&1 >/dev/null
     rsync -av speech.sh ${dest}/usr/bin/ 2>&1 >/dev/null
+    rsync -av $POLTERGEIST_DIR/client/client.py  ${dest}/root/poltergeist/client/ 2>&1 >/dev/null
     do_cmd /root/poltergeist/misc_setup.sh
 
     echo ""

@@ -24,8 +24,8 @@ function deploy() {
     do_cmd mkdir -p /var/www/poltergeist/static
     do_cmd mkdir -p /var/www/poltergeist/templates
     do_cmd mkdir -p /opt/poltergeist
-    rsync -av $POLTERGEIST_DIR/* /opt/poltergeist/ 2>&1 >/dev/null
-    rsync -av $POLTERGEIST_DIR/server/server.py /var/www/poltergeist/ 2>&1 >/dev/null
+    rsync -av $POLTERGEIST_DIR/* ${dest}/opt/poltergeist/ 2>&1 >/dev/null
+    rsync -av $POLTERGEIST_DIR/server/server.py ${dest}/var/www/poltergeist/ 2>&1 >/dev/null
 
     echo "Symlinking files${tostring}..."
     do_cmd ln -s /opt/poltergeist/webdirs/* /var/www/poltergeist/static/ 2>/dev/null

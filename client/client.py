@@ -3,7 +3,7 @@ from subprocess import call, check_output
 
 
 def do_command(data):
-    global clip_dir, play_cmd, quiet_queue, verbosity
+    global clip_dir, play_cmd, play_unkillable_cmd, quiet_queue, verbosity
     clip_played = False
     if verbosity > 1:
         print json.dumps(data, indent=2)
@@ -26,7 +26,13 @@ def do_command(data):
                         print "Is file"
                     if verbosity > 0:
                         print "Playing %s" % clip_file
-                    call("%s %s %s >/dev/null 2>&1" % (play_cmd, clip_file, play_options), shell=True)
+                    if clip == "inagaddadavida":
+                        print "%s is inagaddadavida, setting actual_play_cmd to %s" % (clip, play_unkillable_cmd)
+                        actual_play_cmd = play_unkillable_cmd
+                    else:
+                        print "%s is not inagaddadavida" % clip
+                        actual_play_cmd = play_cmd
+                    call("%s %s %s >/dev/null 2>&1" % (actual_play_cmd, clip_file, play_options), shell=True)
                 else:
                     if verbosity > 1:
                         print "Couldn't find directory %s/%s" % (clip_dir, clip)
@@ -39,11 +45,7 @@ def do_command(data):
                                 if alias.split(".")[0] == clip:
                                     actual_clip = file_name.split("/")[-1].split(".")[0]
                                     clip_file = "%s/%s/%s.mp3" % (clip_dir, actual_clip, actual_clip)
-                                    if clip == "inagaddadavida":
-                                        actual_play_cmd = play_unkillable_cmd
-                                    else:
-                                        actual_play_cmd = play_cmd
-                                    call("%s %s %s >/dev/null 2>&1" % (actual_play_cmd, clip_file, play_options), shell=True)
+                                    call("%s %s %s >/dev/null 2>&1" % (play_cmd, clip_file, play_options), shell=True)
                                     clip_played = True
                                     break
                     if not clip_played:
