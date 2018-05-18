@@ -1,5 +1,6 @@
 import requests, json, os.path, sys, time, thread, Queue, glob, random
 from subprocess import call, check_output
+from requests.exceptions import ReadTimeout
 
 
 def do_command(data):
@@ -27,10 +28,8 @@ def do_command(data):
                     if verbosity > 0:
                         print "Playing %s" % clip_file
                     if clip == "inagaddadavida":
-                        print "%s is inagaddadavida, setting actual_play_cmd to %s" % (clip, play_unkillable_cmd)
                         actual_play_cmd = play_unkillable_cmd
                     else:
-                        print "%s is not inagaddadavida" % clip
                         actual_play_cmd = play_cmd
                     call("%s %s %s >/dev/null 2>&1" % (actual_play_cmd, clip_file, play_options), shell=True)
                 else:
@@ -99,22 +98,28 @@ def get_config():
         verbosity = 0
 
 
+get_config()
 quiet_queue = Queue.Queue()
 thread.start_new_thread(process_quiet_queue, (None,))
+if verbosity > 0:
+    print "Verbosity set to %s" % verbosity
 
 while True:
     try:
         get_config()
         if verbosity > 0:
-            print "Verbosity set to %s" % verbosity
             print "Connecting to %s on port %s as client_id %s" % (server, port, client_id)
-        r = requests.get("%s://%s:%s/cmd/%s" % (schema, server, port, client_id), stream=True)
+        r = requests.get("%s://%s:%s/cmd/%s" % (schema, server, port, client_id), stream=True, timeout=600)
         if verbosity > 0:
-            print "Connected"
+            print "Received bytes from server"
         for json_data in r.iter_lines():
             if json_data:
                 print json.dumps(json.loads(json_data), indent=2)
                 thread.start_new_thread(do_command, (json.loads(json_data),))
+    except ReadTimeout:
+        # The connection is designed to timeout and refresh every 10 minutes
+        if verbosity > 1:
+            print "Didn't receive a command in 10 minutes. Looping."
     except KeyboardInterrupt:
         if verbosity > 0:
             print "Received CTRL-C, exiting..."
