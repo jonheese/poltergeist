@@ -18,7 +18,7 @@ def get_commands(client_id):
     quiet = False
     quiet_all = False
     start_time = time.time()
-    while len(clips) == 0 and time.time() - start_time < 600:
+    while len(clips) == 0 and time.time() - start_time < 60:
         for key in redis.scan_iter(target_key+":*"):
             clip = redis.get(key)
             if quiet or clip == "quiet":
@@ -70,8 +70,6 @@ def submit_command(clip_name=None):
         return render_template('%s/index.html' % clip_name)
     except TemplateNotFound:
         return render_template("notfound.html")
-    #return urllib2.urlopen("http://tv-static.inetu.org/%s" % clip_name).read()
-    #return jsonify(status = "Request to play %s on %s successfully queued" % (clip_name, client_id))
 
 
 def put_command(client_id, clip_name):
