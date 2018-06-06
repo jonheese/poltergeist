@@ -39,6 +39,12 @@ def monitor():
     return "Success"
 
 
+@app.route('/robots.txt', methods=['GET'])
+def robots():
+    return "User agent: * \n" + \
+           "Disallow: /"
+
+
 @app.route('/play/<clip_name>', methods=['GET'])
 @app.route('/', methods=['GET'])
 def submit_command(clip_name=None):
