@@ -67,8 +67,8 @@ def submit_command(clip_name=None):
         clip_name = domain.split(".")[0]
 
     if (clip_name.lower() == "friday" and datetime.today().weekday() != 4) or \
-            ((clip_name.lower() == "lastchristmas" or clip_name.lower() == "jinglebell") and \
-            datetime.today().month != 12):
+            ((clip_name.lower() == "lastchristmas" or clip_name.lower() == "jinglebell") and datetime.today().month != 12) or \
+            (clip_name.lower() == "mondays" and datetime.today().weekday() != 0):
         return '<html><body><p align="center"><img src="/static/stahp.jpg" /></p></body></html>'
     put_command(client_id, clip_name)
 
