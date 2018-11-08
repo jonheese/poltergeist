@@ -10,7 +10,7 @@ if [ -n "$site_name" ] ; then
     cp webdirs/index.html.template webdirs/$site_name/index.html
     sed -i "s/@site@/$site_name/g" webdirs/${site_name}/index.html
     sed -i "s/@title@/$page_title/g" webdirs/${site_name}/index.html
-    mv webdirs/${site_name}.mp3 webdirs/$site_name/${site_name}.mp3
+    mv webdirs/${site_name}*.mp3 webdirs/$site_name/
     cp apache-confs/site.conf.template apache-confs/${site_name}.conf
     sed -i "s/@site@/$site_name/g" apache-confs/${site_name}.conf
 fi
