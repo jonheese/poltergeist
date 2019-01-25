@@ -36,4 +36,4 @@ if [ $? -ne 0 ] ; then
     exit 1
 fi
 git push -u origin master
-/root/jh/bin/deploy-poltergeist.sh
+./deploy.sh
