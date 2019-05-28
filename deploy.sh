@@ -17,11 +17,20 @@ function deploy() {
     	onstring=" on $1"
     fi
 
+    echo "Ensuring apache2 is installed${onstring}..."
+    do_cmd dpkg --get-selections | grep -v deinstall | grep -v apache2- | grep "^apache2" >/dev/null
+    if [ $? -ne 0 ] ; then
+        do_cmd apt-get install -y apache2
+    fi
+
+    echo ""
     echo "Copying files${tostring}..."
     rsync -av apache-confs/* ${dest}/etc/apache2/sites-available/ 2>&1 >/dev/null
     rsync -av webdirs/* ${dest}/var/www/ 2>&1 >/dev/null
     rsync -av speech.sh ${dest}/usr/bin/ 2>&1 >/dev/null
+    do_cmd mkdir -p /root/poltergeist/client
     rsync -av $POLTERGEIST_DIR/client/client.py  ${dest}/root/poltergeist/client/ 2>&1 >/dev/null
+    rsync -av misc_setup.sh ${dest}/root/poltergeist/ 2>&1 >/dev/null
     do_cmd /root/poltergeist/misc_setup.sh
 
     echo ""
