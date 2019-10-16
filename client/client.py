@@ -14,12 +14,12 @@ def do_command(data):
     if "clips" in data.keys():
         for clip in data["clips"]:
             timestamp = float(clip.split(":")[1])
-            if timestamp > checkpoint:
-                checkpoint = timestamp
             if timestamp <= checkpoint:
                 if timestamp + 60 <= time.time():
                     requests.get("%s://%s:%s/delete/poltergeist:clip:%s:%s" % (schema, server, port, client_id, timestamp))
                 continue
+            if timestamp > checkpoint:
+                checkpoint = timestamp
             clip = clip.split(":")[0]
             if clip == "quiet" or clip == "quiet_all":
                 quiet_queue.put(clip)
@@ -42,7 +42,7 @@ def do_command(data):
                         actual_play_cmd = play_unkillable_cmd
                     else:
                         actual_play_cmd = play_cmd
-                    call("%s %s %s >/dev/null 2>&1" % (actual_play_cmd, clip_file, play_options), shell=True)
+                    call("%s %s %s" % (actual_play_cmd, clip_file, play_options), shell=True)
                 else:
                     if verbosity > 1:
                         print "Couldn't find directory %s/%s" % (clip_dir, clip)
@@ -55,7 +55,7 @@ def do_command(data):
                                 if alias.split(".")[0] == clip:
                                     actual_clip = file_name.split("/")[-1].split(".")[0]
                                     clip_file = "%s/%s/%s.mp3" % (clip_dir, actual_clip, actual_clip)
-                                    call("%s %s %s >/dev/null 2>&1" % (play_cmd, clip_file, play_options), shell=True)
+                                    call("%s %s %s" % (play_cmd, clip_file, play_options), shell=True)
                                     clip_played = True
                                     break
                     if not clip_played:
@@ -74,8 +74,10 @@ def process_quiet_queue(dummy):
                     try:
                         clip = quiet_queue.get()
                         if clip == "quiet_all":
-                            call(["killall", "play-unkillable"])
-                        call(["killall", "play"])
+                            call(["killall", play_unkillable_cmd])
+                        kill_cmd = play_cmd.split("/")[-1]
+                        print "killall %s" % kill_cmd
+                        call(["killall", kill_cmd])
                     except OSError as e:
                         # We don't care if the killall command fails
                         print e
