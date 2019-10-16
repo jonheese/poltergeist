@@ -3,13 +3,24 @@ from subprocess import call, check_output
 from requests.exceptions import ReadTimeout
 
 
+checkpoint = 0
+
+
 def do_command(data):
-    global clip_dir, play_cmd, play_unkillable_cmd, quiet_queue, verbosity
+    global clip_dir, play_cmd, play_unkillable_cmd, quiet_queue, verbosity, checkpoint
     clip_played = False
     if verbosity > 1:
         print json.dumps(data, indent=2)
     if "clips" in data.keys():
         for clip in data["clips"]:
+            timestamp = float(clip.split(":")[1])
+            if timestamp > checkpoint:
+                checkpoint = timestamp
+            if timestamp <= checkpoint:
+                if timestamp + 60 <= time.time():
+                    requests.get("%s://%s:%s/delete/poltergeist:clip:%s:%s" % (schema, server, port, client_id, timestamp))
+                continue
+            clip = clip.split(":")[0]
             if clip == "quiet" or clip == "quiet_all":
                 quiet_queue.put(clip)
                 print "Put %s in the queue" % clip
@@ -114,7 +125,6 @@ while True:
             print "Received bytes from server"
         for json_data in r.iter_lines():
             if json_data:
-                print json.dumps(json.loads(json_data), indent=2)
                 thread.start_new_thread(do_command, (json.loads(json_data),))
     except ReadTimeout:
         # The connection is designed to timeout and refresh every 10 minutes

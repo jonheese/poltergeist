@@ -15,23 +15,22 @@ qkey = app.config['REDIS_QUEUE_KEY']
 def get_commands(client_id):
     target_key = '%s:clip:%s' % (qkey, client_id)
     clips = []
-    quiet = False
-    quiet_all = False
     start_time = time.time()
     while len(clips) == 0 and time.time() - start_time < 60:
         for key in redis.scan_iter(target_key+":*"):
             clip = redis.get(key)
-            if quiet or clip == "quiet":
-                quiet = True
-                clips = [ "quiet" ]
-            elif quiet_all or clip == "quiet_all":
-                quiet_all = True
-                clips = [ "quiet_all" ]
-            else:
-                clips.append(clip)
-            redis.delete(key)
+            clips.append(clip)
+            if clip.startswith("quiet:") or clip.startswith("quiet_all:"):
+                clips = [ clip ]
+                break
         time.sleep(0.05)
     return json.dumps({"clips": clips})
+
+
+@app.route('/delete/<key>', methods=['GET'])
+def delete(key):
+    redis.delete(key)
+    return "Success deleting key %s" % key
 
 
 @app.route('/monitor', methods=['GET'])
@@ -79,8 +78,9 @@ def submit_command(clip_name=None):
 
 
 def put_command(client_id, clip_name):
-    target_key = '%s:clip:%s:%s' % (qkey, client_id, uuid.uuid4())
-    redis.set(target_key, clip_name)
+    timestamp = time.time()
+    target_key = '%s:clip:%s:%s' % (qkey, client_id, timestamp)
+    redis.set(target_key, "%s:%s" % (clip_name, str(timestamp)))
 
 
 @app.route('/alexa', methods=['POST'])
