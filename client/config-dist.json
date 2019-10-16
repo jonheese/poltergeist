@@ -6,7 +6,9 @@
     "clip_dir": "/var/www",
     "play_cmd": "/usr/bin/play",
     "play_unkillable_cmd": "/usr/bin/play-unkillable",
-    "play_options": "pad 30000s@0:00",
+    "play_options": "pad 30000s@0:00 >/dev/null 2>&1",
+    "kill_cmd": "play",
+    "killall_cmd": "killall",
     "debug": false,
     "quiet": false
 }

@@ -27,12 +27,12 @@ def do_command(data):
             else:
                 if verbosity > 1:
                     print "clip %s command received" % clip
-                if os.path.isdir("%s/%s" % (clip_dir, clip)):
-                    clip_file = "%s/%s/%s.mp3" % (clip_dir, clip, clip)
+                if os.path.isdir("%s%s%s" % (clip_dir, os.path.sep, clip)):
+                    clip_file = "%s%s%s%s%s.mp3" % (clip_dir, os.path.sep, clip, os.path.sep, clip)
                     if not os.path.exists(clip_file):
                         if verbosity > 1:
                             print "Is directory"
-                        clips = glob.glob("%s/%s/%s*.mp3" % (clip_dir, clip, clip))
+                        clips = glob.glob("%s%s%s%s%s*.mp3" % (clip_dir, os.path.sep, clip, os.path.sep, clip))
                         clip_file = clips[random.randint(0, len(clips)-1)]
                     elif verbosity > 1:
                         print "Is file"
@@ -45,7 +45,7 @@ def do_command(data):
                     call("%s %s %s" % (actual_play_cmd, clip_file, play_options), shell=True)
                 else:
                     if verbosity > 1:
-                        print "Couldn't find directory %s/%s" % (clip_dir, clip)
+                        print "Couldn't find directory %s%s%s" % (clip_dir, os.path.sep, clip)
                     for file_name in glob.glob("/etc/apache2/sites-enabled/*.conf"):
                         with open(file_name) as f:
                             contents = f.read()
@@ -53,8 +53,8 @@ def do_command(data):
                             if 'ServerAlias' in line:
                                 alias = line.split(" ")[1]
                                 if alias.split(".")[0] == clip:
-                                    actual_clip = file_name.split("/")[-1].split(".")[0]
-                                    clip_file = "%s/%s/%s.mp3" % (clip_dir, actual_clip, actual_clip)
+                                    actual_clip = file_name.split(os.path.sep)[-1].split(".")[0]
+                                    clip_file = "%s%s%s%s%s.mp3" % (clip_dir, os.path.sep, actual_clip, os.path.sep, actual_clip)
                                     call("%s %s %s" % (play_cmd, clip_file, play_options), shell=True)
                                     clip_played = True
                                     break
@@ -63,7 +63,7 @@ def do_command(data):
 
 
 def process_quiet_queue(dummy):
-    global clip_dir, quiet_queue, verbosity
+    global clip_dir, quiet_queue, kill_cmd, killall_cmd, verbosity
     if verbosity > 1:
         print "Starting up quiet queue"
     try:
@@ -75,9 +75,9 @@ def process_quiet_queue(dummy):
                         clip = quiet_queue.get()
                         if clip == "quiet_all":
                             call(["killall", play_unkillable_cmd])
-                        kill_cmd = play_cmd.split("/")[-1]
-                        print "killall %s" % kill_cmd
-                        call(["killall", kill_cmd])
+                        full_kill_cmd = killall_cmd.split(" ")
+                        full_kill_cmd.append(kill_cmd)
+                        call(full_kill_cmd)
                     except OSError as e:
                         # We don't care if the killall command fails
                         print e
@@ -94,7 +94,7 @@ def get_config():
         print "You must configure config.py -- see config-dist.json for an example"
         sys.exit(1)
 
-    global config, schema, server, port, client_id, clip_dir, play_cmd, play_unkillable_cmd, play_options, verbosity
+    global config, schema, server, port, client_id, clip_dir, play_cmd, play_unkillable_cmd, kill_cmd, killall_cmd, play_options, verbosity
     config = json.load(open('config.json'))
     schema = config["schema"] if "schema" in config.keys() else "http"
     server = config["server"] if "server" in config.keys() else "localhost"
@@ -103,7 +103,9 @@ def get_config():
     clip_dir = config["clip_dir"] if "clip_dir" in config.keys() else "/var/www"
     play_cmd = config["play_cmd"] if "play_cmd" in config.keys() else "/usr/bin/play"
     play_unkillable_cmd = config["play_unkillable_cmd"] if "play_unkillable_cmd" in config.keys() else "/usr/bin/play-unkillable"
-    play_options = config["play_options"] if "play_options" in config.keys() else "pad 30000s@0:00"
+    play_options = config["play_options"] if "play_options" in config.keys() else "pad 30000s@0:00 >/dev/null 2>&1"
+    kill_cmd = config["kill_cmd"] if "kill_cmd" in config.keys() else "play"
+    killall_cmd = config["killall_cmd"] if "killall_cmd" in config.keys() else "killall"
     verbosity = int(config["verbosity"]) if "verbosity" in config.keys() else 1
     if "debug" in config.keys() and bool(config["debug"]):
         verbosity = 2
