@@ -7,7 +7,7 @@ checkpoint = 0
 
 
 def do_command(data):
-    global clip_dir, play_cmd, play_unkillable_cmd, quiet_queue, verbosity, checkpoint
+    global poltergeist_dir, clip_dir, play_cmd, play_unkillable_cmd, quiet_queue, verbosity, checkpoint
     clip_played = False
     if verbosity > 1:
         print json.dumps(data, indent=2)
@@ -46,7 +46,7 @@ def do_command(data):
                 else:
                     if verbosity > 1:
                         print "Couldn't find directory %s%s%s" % (clip_dir, os.path.sep, clip)
-                    for file_name in glob.glob("/etc/apache2/sites-enabled/*.conf"):
+                    for file_name in glob.glob("%s%sapache-confs%s*.conf" % (poltergeist_dir, os.path.sep, os.path.sep)):
                         with open(file_name) as f:
                             contents = f.read()
                         for line in contents.splitlines():
@@ -90,16 +90,36 @@ def process_quiet_queue(dummy):
 
 
 def get_config():
-    if not os.path.isfile('config.json'):
-        print "You must configure config.py -- see config-dist.json for an example"
-        sys.exit(1)
+    global config_file, config, schema, server, port, client_id, poltergeist_dir, clip_dir, play_cmd, \
+            play_unkillable_cmd, kill_cmd, killall_cmd, play_options, verbosity
 
-    global config, schema, server, port, client_id, clip_dir, play_cmd, play_unkillable_cmd, kill_cmd, killall_cmd, play_options, verbosity
-    config = json.load(open('config.json'))
+    if not config_file:
+        if not os.path.isfile('config.json'):
+            if sys.platform == "win32":
+                appdata_dir = os.getenv('appdata')
+                if not os.path.isfile("%s\\.poltergeist\\config.json" % appdata_dir):
+                    print "You must configure %%appdata%%\\.poltergeist\\config.py -- see config-dist.json for an example"
+                    sys.exit(1)
+                else:
+                    config_file = "%s\\.poltergeist\\config.json" % appdata_dir
+            else:
+                home_dir = os.getenv('HOME')
+                if not os.path.isfile("%s/.poltergeist/config.json" % home_dir):
+                    print "You must configure $HOME/.poltergeist/config.py -- see config-dist.json for an example"
+                    sys.exit(1)
+                else:
+                    config_file = "%s/.poltergeist/config.json" % home_dir
+        else:
+            config_file = 'config.json'
+
+        print "Using config file %s" % config_file
+
+    config = json.load(open(config_file))
     schema = config["schema"] if "schema" in config.keys() else "http"
     server = config["server"] if "server" in config.keys() else "localhost"
     port = config["port"] if "port" in config.keys() else 80
     client_id = config["client_id"] if "client_id" in config else check_output("hostname")
+    poltergeist_dir = config["poltergeist_dir"] if "poltergeist_dir" in config.keys() else "/root/poltergeist"
     clip_dir = config["clip_dir"] if "clip_dir" in config.keys() else "/var/www"
     play_cmd = config["play_cmd"] if "play_cmd" in config.keys() else "/usr/bin/play"
     play_unkillable_cmd = config["play_unkillable_cmd"] if "play_unkillable_cmd" in config.keys() else "/usr/bin/play-unkillable"
@@ -112,7 +132,7 @@ def get_config():
     if "quiet" in config.keys() and bool(config["quiet"]):
         verbosity = 0
 
-
+config_file = None
 get_config()
 quiet_queue = Queue.Queue()
 thread.start_new_thread(process_quiet_queue, (None,))

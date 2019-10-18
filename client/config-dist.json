@@ -3,6 +3,7 @@
     "server" : "localhost",
     "port": 80,
     "client_id": "<hostname>",
+    "poltergeist_dir": "/root/poltergeist",
     "clip_dir": "/var/www",
     "play_cmd": "/usr/bin/play",
     "play_unkillable_cmd": "/usr/bin/play-unkillable",
