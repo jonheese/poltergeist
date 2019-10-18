@@ -1,4 +1,4 @@
-#!/usr/bin/python -u
+#!/usr/bin/env -S python -u
 
 import requests, json, os.path, sys, time, thread, Queue, glob, random
 from subprocess import call, check_output
