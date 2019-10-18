@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/root/poltergeist/client
-ExecStart=/usr/bin/python -u /root/poltergeist/client/client.py
+WorkingDirectory=@@CLIENT_DIR@@
+ExecStart=@@CLIENT_DIR@@/client.py
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=poltergeist
