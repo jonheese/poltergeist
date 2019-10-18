@@ -8,8 +8,9 @@ Poltergeist uses a server/client architecture, where there is a single server to
 ```
 git clone <clone_url>
 cd poltergeist/client
-cp config-dist.json config.json
-# edit config.json, filling in the appropriate values, here are some suggestions:
+mkdir ~/.poltergeist
+cp config-dist.json ~/.poltergeist/config.json
+# edit ~/.poltergeist/config.json, filling in the appropriate values, here are some suggestions:
 #
 #    "client_id": "inetu-hdmi19",
 #    "poltergeist_dir": "/home/<username>/poltergeist",
@@ -25,13 +26,17 @@ cp config-dist.json config.json
 ./install-client.sh # provide sudo password
 systemctl start poltergeist-client
 ```
+To uninstall:
+```
+./uninstall-client.sh # provide sudo password
+```
 
 ### MacOS
 ```
 git clone <clone_url>
 cd poltergeist/client
-cp config-dist.json config.json
-# edit config.json, filling in the appropriate values, here are some suggestions:
+cp config-dist.json ~/.poltergeist/config.json
+# edit ~/.poltergeist/config.json, filling in the appropriate values, here are some suggestions:
 #
 #    "client_id": "inetu-hdmi19",
 #    "poltergeist_dir": "/home/<username>/poltergeist",
@@ -46,6 +51,10 @@ cp config-dist.json config.json
 #
 ./install-client.sh # provide sudo password
 lanchctl load /Library/LaunchAgents/com.jonheese.poltergeist-client.plist
+```
+To uninstall:
+```
+./uninstall-client.sh # provide sudo password
 ```
 
 ### Windows
@@ -83,7 +92,7 @@ cp config-dist.json config.json
 ```
 
 ## Keeping your content updated
-It's recommended that you schedule `git pull`s on a regular basis (via `cron` or Task Scheduled) to ensure that you have the latest sound clip files.  This is left as an exercise for the reader.
+It is recommended that you schedule `git pull`s on a regular basis (via `cron` or Task Scheduled) to ensure that you have the latest sound clip files.  This is left as an exercise for the reader.
 
 ## Adding your own content
 ### Using the automatic deploy script (`addsite.sh`)
