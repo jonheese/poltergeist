@@ -6,15 +6,14 @@ Poltergeist uses a server/client architecture, where there is a single server to
 ## Client Installation
 ### Linux (Ubuntu 18.04+ or RHEL/CentOS 7+ or Fedora (with systemd))
 ```
-git clone <clone_url>
 cd poltergeist/client
 mkdir ~/.poltergeist
 cp config-dist.json ~/.poltergeist/config.json
 # edit ~/.poltergeist/config.json, filling in the appropriate values, here are some suggestions:
 #
 #    "client_id": "inetu-hdmi19",
-#    "poltergeist_dir": "/home/<username>/poltergeist",
-#    "clip_dir": "/home/<username>/poltergeist/webdirs",
+#    "poltergeist_dir": "/path/to/poltergeist",
+#    "clip_dir": "/path/to/poltergeist/webdirs",
 #    "play_cmd": "/usr/bin/play",
 #    "play_unkillable_cmd": "/usr/bin/play",
 #    "play_options": "pad 30000s@0:00 >/dev/null 2>&1",
@@ -33,14 +32,14 @@ To uninstall:
 
 ### MacOS
 ```
-git clone <clone_url>
 cd poltergeist/client
+mkdir ~/.poltergeist
 cp config-dist.json ~/.poltergeist/config.json
 # edit ~/.poltergeist/config.json, filling in the appropriate values, here are some suggestions:
 #
 #    "client_id": "inetu-hdmi19",
-#    "poltergeist_dir": "/home/<username>/poltergeist",
-#    "clip_dir": "/home/<username>/poltergeist/webdirs",
+#    "poltergeist_dir": "/path/to/poltergeist",
+#    "clip_dir": "/path/to/poltergeist/webdirs",
 #    "play_cmd": "/usr/bin/afplay",
 #    "play_unkillable_cmd": "/usr/bin/afplay",
 #    "play_options": ">/dev/null 2>&1",
@@ -62,14 +61,14 @@ NOTE: You will need to install Python and VLC and add both to your `%PATH%` befo
 
 NOTE: Due to the way that Windows services interact with audio devices, the Windows client is simply run in the background and must be manually stopped.  Scripts are provided to do this, and the starting can be automated using Windows startup features. 
 ```
-git clone <clone_url>
-cd poltergeist
-cp config-dist.json config.json
-# edit config.json, filling in the appropriate values, here are some suggestions:
+cd poltergeist\client
+mkdir %appdata%\.poltergeist
+cp config-dist.json %appdata%\.poltergeist\config.json
+# edit %appdata%\.poltergeist\config.json, filling in the appropriate values, here are some suggestions:
 #
 #    "client_id": "inetu-hdmi19",
-#    "poltergeist_dir": "c:\\Users\\<username>\\poltergeist",
-#    "clip_dir": "c:\\Users\\<username\\poltergeist\\webdirs",
+#    "poltergeist_dir": "c:\\Path\\to\\poltergeist",
+#    "clip_dir": "c:\\Path\\to\\poltergeist\\webdirs",
 #    "play_cmd": "start vlc.exe",
 #    "play_unkillable_cmd": "start vlc.exe",
 #    "kill_cmd": "vlc.exe",
@@ -78,11 +77,11 @@ cp config-dist.json config.json
 #    "debug": false,
 #    "quiet": true
 #
+# edit start-poltergeist.ps1 and fill in the path to the pythonw.exe binary on your system
 ```
 
 #### Starting the Poltergeist client
 ```
-# Edit start-poltergeist.ps1 and fill in the path to the pythonw.exe binary on your system
 .\start-poltergeist.ps1
 ```
 
