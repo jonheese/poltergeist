@@ -59,6 +59,9 @@ To uninstall:
 ### Windows
 NOTE: You will need to install Python and VLC and add both to your `%PATH%` before any of this will work on Windows.
 
+NOTE: You will also need to install the `requests` Python.  This can usually be done by running
+```pip.exe install -y requests```
+
 NOTE: Due to the way that Windows services interact with audio devices, the Windows client is simply run in the background and must be manually stopped.  Scripts are provided to do this, and the starting can be automated using Windows startup features. 
 ```
 cd poltergeist\client
