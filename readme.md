@@ -57,7 +57,7 @@ To uninstall:
 ```
 
 ### Windows
-NOTE: You will need to install Python and VLC and add both to your `%PATH%` before any of this will work on Windows.
+NOTE: You will need to install Python and add its bin directory to your `%PATH%` before any of this will work on Windows.
 
 NOTE: You will also need to install the `requests` Python.  This can usually be done by running
 ```pip.exe install -y requests```
@@ -72,11 +72,11 @@ cp config-dist.json %appdata%\.poltergeist\config.json
 #    "client_id": "inetu-hdmi19",
 #    "poltergeist_dir": "c:\\Path\\to\\poltergeist",
 #    "clip_dir": "c:\\Path\\to\\poltergeist\\webdirs",
-#    "play_cmd": "start vlc.exe",
-#    "play_unkillable_cmd": "start vlc.exe",
-#    "kill_cmd": "vlc.exe",
+#    "play_cmd": "c:\\Path\\to\\poltergeist\\tools\\cmdmp3win.exe",
+#    "play_unkillable_cmd": "c:\\Path\\to\\poltergeist\\tools\\cmdmp3win.exe",
+#    "kill_cmd": "cmdmp3win.exe",
 #    "killall_cmd": "c:\\Windows\\system32\\taskkill.exe -F -T -IM",
-#    "play_options": "-I dummy --dummy-quiet --play-and-exit",
+#    "play_options": "",
 #    "debug": false,
 #    "quiet": true
 #
