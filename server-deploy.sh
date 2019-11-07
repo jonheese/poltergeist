@@ -11,10 +11,10 @@ function deploy() {
     dest=""
     error=0
     if [ -n "$1" ] ; then
-	    ssh="ssh $1"
-    	dest="${1}:"
-	    tostring=" to $1"
-    	onstring=" on $1"
+        ssh="ssh $1"
+        dest="${1}:"
+        tostring=" to $1"
+        onstring=" on $1"
     fi
 
     echo "Deleting/re-creating directories${onstring}..."
@@ -24,10 +24,12 @@ function deploy() {
     do_cmd mkdir -p /var/www/poltergeist/static
     do_cmd mkdir -p /var/www/poltergeist/templates
     do_cmd mkdir -p /opt/poltergeist
+
+    echo "Rsyncing files${tostring}..."
     rsync -av $POLTERGEIST_DIR/* ${dest}/opt/poltergeist/ 2>&1 >/dev/null
     rsync -av $POLTERGEIST_DIR/server/server.py ${dest}/var/www/poltergeist/ 2>&1 >/dev/null
 
-    echo "Symlinking files${tostring}..."
+    echo "Symlinking files${onstring}..."
     do_cmd ln -s /opt/poltergeist/webdirs/* /var/www/poltergeist/static/ 2>/dev/null
     do_cmd ln -s /opt/poltergeist/webdirs/* /var/www/poltergeist/templates/ 2>/dev/null
 
