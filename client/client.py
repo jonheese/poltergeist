@@ -1,4 +1,4 @@
-#!/usr/bin/env -S python -u
+#!/usr/bin/env PYTHONUNBUFFERED=1 python
 
 import requests, json, os.path, sys, time, glob, random
 from subprocess import call, check_output
