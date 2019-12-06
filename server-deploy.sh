@@ -18,11 +18,9 @@ function deploy() {
     fi
 
     echo "Deleting/re-creating directories${onstring}..."
-    do_cmd rm -rf /var/www/poltergeist/static
-    do_cmd rm -rf /var/www/poltergeist/templates
+    do_cmd rm -rf /var/www/poltergeist/{static,templates}
     do_cmd rm -rf /opt/poltergeist
-    do_cmd mkdir -p /var/www/poltergeist/static
-    do_cmd mkdir -p /var/www/poltergeist/templates
+    do_cmd mkdir -p /var/www/poltergeist/{static,templates}
     do_cmd mkdir -p /opt/poltergeist
 
     echo "Rsyncing files${tostring}..."
