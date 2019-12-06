@@ -26,6 +26,7 @@ if [ -n "$imgfilepath" ] ; then
     sed -i "s/@imgfile@/$imgfile/g" webdirs/${site_name}/index.html
     sed -i "s/<\!\-\-//g" webdirs/${site_name}/index.html
     sed -i "s/\-\->//g" webdirs/${site_name}/index.html
+    sed -i "s/@site_name@/$site_name/g" webdirs/${site_name}/index.html
     mv $imgfilepath webdirs/${site_name}/
 fi
 
