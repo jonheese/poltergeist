@@ -2,49 +2,20 @@
 #set -x
 
 . /var/www/list/pilist.txt
-hostname=$(/bin/hostname | cut -d'.' -f1)
-apachectl=$(/usr/sbin/apachectl -S 2>/dev/null | grep -v hdmi)
-root_sites=$(echo "$apachectl" | grep namevhost | awk '{print $4}' | sort)
-all_sites=$(echo "$apachectl" | grep "namevhost\|alias")
-my_sites=$(echo "$site_pi_list" | grep $hostname | cut -d' ' -f2-)
-sites=""
+hostname=$(/bin/hostname -f)
+sites=$(find "${POLTERGEIST_DIR}/webdirs" -type d | sort)
+suffix=".tv"$(echo "$site_pi_list" | grep $hostname | awk '{print $2}')
 
 IFS=$'\n'
-
-function is_my_site {
-	hostname_found=""
-	for my_site in $my_sites ; do
-		hostname_found=$(echo "$1" | grep "$my_site")
-		[ -n "$hostname_found" ] && break
-	done
-}
 
 echo "<html>"
 echo "<body>"
 
-for root_site in $root_sites; do
-	indent=""
-	is_my_site $root_site
-	[ -n "$hostname_found" ] && sites=$(printf "%s\n@%s" "$sites" "$root_site") && indent="###"
-	possible_aliases=$(echo "$all_sites" | grep -A99 $root_site | tail -n+2)
-    for possible_alias in $possible_aliases ; do
-		namevhost_found=$(echo "$possible_alias" | grep "namevhost")
-		[ -n "$namevhost_found" ] && break
-		alias=$(echo "$possible_alias" | awk '{print $2}')
-		is_my_site $alias
-		[ -n "$hostname_found" ] && sites=$(printf "%s\n%s@%s" "$sites" "$indent" "$alias") && indent="###"
-	done
-done
-
 for site in $sites ; do
-	raw_site="$site"
-	site=$(echo "$site" | sed 's/&nbsp;//g')
-    echo "$site" | grep "###" >/dev/null 2>&1
-    if [ $? -eq 0 ] ; then
-    	echo "&nbsp;&nbsp;&nbsp;<a href=\"$site\">$raw_site</a><br />" | sed 's/\@/http:\/\//g' | sed 's/\#\#\#//g'
-    else
-    	echo "<a href=\"$site\">$raw_site</a><br />" | sed 's/\@/http:\/\//g'
-    fi
+	site=$(basename $site)
+	[ "$site" == "webdirs" ] && continue
+	fqdn="${site}${suffix}"
+	echo "<a href=\"http://${fqdn}\">http://${fqdn}</a><br />"
 done
 
 echo "</body>"

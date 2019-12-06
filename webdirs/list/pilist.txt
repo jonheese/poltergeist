@@ -2,3 +2,4 @@ site_pi_list="
 inetu-hdmi19.int.inetu.net .inetu.org
 torrents.jonheese.com .inetu.org
 inetu-hdmi13.int.inetu.net .inetu.net"
+POLTERGEIST_DIR="/root/poltergeist"

@@ -1,6 +1,8 @@
 <html>
 	<head>
 		<title>@title@</title>
+		<meta property="og:title" content="@title@"/>
+		<meta property="og:image" content="http://@sitename@.tv.inetu.org/@imagefile@"/>
 	</head>
 	<body>
 <!--		<p align="center"><img src='@imgfile@' /></p>-->
