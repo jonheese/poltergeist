@@ -1,10 +1,14 @@
 import json, uuid, time
 from redis import Redis
 from flask import Flask, request, jsonify, render_template
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from jinja2 import TemplateNotFound
 from datetime import datetime
 
 app = Flask(__name__)
+limiter = Limiter(app,
+                  key_func=get_remote_address)
 
 redis = Redis()
 app.config['REDIS_QUEUE_KEY'] = 'poltergeist'
@@ -47,6 +51,7 @@ def robots():
 @app.route('/play/<clip_name>/<queue_name>', methods=['GET'])
 @app.route('/play/<clip_name>', methods=['GET'])
 @app.route('/', methods=['GET'])
+@limiter.limit("1 per 2 second")
 def submit_command(clip_name=None, queue_name=None):
     try:
         user_agent = request.headers['User-Agent'].lower()
@@ -97,6 +102,14 @@ def handle_alexa_request():
         return generate_response("Okay")
     else:
         return generate_response("I couldn't find that clip")
+
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return """
+        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+        <title>429 Too Many Requests</title>
+        <h1>Too Many Requests</h1>
+    """
 
 
 def generate_response(output_speech, card_title="", card_subtitle="", card_content="", endSession=True):
