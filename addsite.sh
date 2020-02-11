@@ -8,11 +8,11 @@ read page_title
 if [ -n "$site_name" ] ; then
     mkdir webdirs/$site_name
     cp webdirs/index.html.template webdirs/$site_name/index.html
-    sed -i "s/@site@/$site_name/g" webdirs/${site_name}/index.html
-    sed -i "s/@title@/$page_title/g" webdirs/${site_name}/index.html
+    sed -i '' "s/@site@/$site_name/g"  webdirs/${site_name}/index.html
+    sed -i '' "s/@title@/$page_title/g"  webdirs/${site_name}/index.html
     mv webdirs/${site_name}*.mp3 webdirs/$site_name/
     cp apache-confs/site.conf.template apache-confs/${site_name}.conf
-    sed -i "s/@site@/$site_name/g" apache-confs/${site_name}.conf
+    sed -i '' "s/@site@/$site_name/g"  apache-confs/${site_name}.conf
 fi
 
 if [ -f webdirs/${site_name}.jpg ] ; then
@@ -26,7 +26,7 @@ if [ -n "$imgfilepath" ] ; then
     sed -i "s/@imgfile@/$imgfile/g" webdirs/${site_name}/index.html
     sed -i "s/<\!\-\-//g" webdirs/${site_name}/index.html
     sed -i "s/\-\->//g" webdirs/${site_name}/index.html
-    sed -i "s/@site_name@/$site_name/g" webdirs/${site_name}/index.html
+    sed -i "s/@site@/$site_name/g" webdirs/${site_name}/index.html
     mv $imgfilepath webdirs/${site_name}/
 fi
 

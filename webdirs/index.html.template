@@ -2,10 +2,10 @@
 	<head>
 		<title>@title@</title>
 <!--		<meta property="og:title" content="@title@"/>-->
-<!--		<meta property="og:image" content="/static/@site_name@/@imgfile@"/>-->
+<!--		<meta property="og:image" content="/static/@site@/@imgfile@"/>-->
 	</head>
 	<body>
 <!--		<p align="center"><img src='@imgfile@' /></p>-->
-		<p align="center"><audio controls><source src="/static/@site_name@/@site_name@.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls><source src="/static/@site@/@site@.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>
