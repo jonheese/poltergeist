@@ -105,11 +105,11 @@ def handle_alexa_request():
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
-    return """
+    return make_response("""
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
         <title>429 Too Many Requests</title>
         <h1>Too Many Requests</h1>
-    """
+    """, 429)
 
 
 def generate_response(output_speech, card_title="", card_subtitle="", card_content="", endSession=True):
