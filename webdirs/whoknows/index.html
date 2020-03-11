@@ -1,9 +1,10 @@
 <html>
 	<head>
 		<title>Mitch Hedberg - Who Knows?></title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
+	<body onload="set_mp3_source('whoknows')">
 <!--		<p align="center"><img src='@imgfile@' /></p>-->
-		<p align="center"><audio controls><source src="/static/whoknows/whoknows.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls id="player"><source src="/static/whoknows/whoknows.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

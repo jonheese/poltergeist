@@ -1,8 +1,9 @@
 <html>
 	<head>
 		<title>Mother Fuck You!</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
-		<p align="center"><audio controls><source src="/static/motherfuckyou/motherfuckyou.mp3" type="audio/mpeg"></audio></p>
+	<body onload="set_mp3_source('motherfuckyou')">
+		<p align="center"><audio controls id="player"><source src="/static/motherfuckyou/motherfuckyou.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

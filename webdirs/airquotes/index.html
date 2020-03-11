@@ -1,9 +1,10 @@
 <html>
 	<head>
 		<title>Bennet Brauer - Air Quotes</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
+	<body onload="set_mp3_source('airquotes')">
 <!--		<p align="center"><img src='@imgfile@' /></p>-->
-		<p align="center"><audio controls><source src="/static/airquotes/airquotes.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls id="player"><source src="/static/airquotes/airquotes.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

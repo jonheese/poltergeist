@@ -1,9 +1,10 @@
 <html>
 	<head>
 		<title>I Learned It By Watching You!</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
+	<body onload="set_mp3_source('learnedit')">
 <!--		<p align="center"><img src='@imgfile@' /></p>-->
-		<p align="center"><audio controls><source src="/static/learnedit/learnedit.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls id="player"><source src="/static/learnedit/learnedit.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

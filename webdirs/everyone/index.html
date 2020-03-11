@@ -2,11 +2,12 @@
 	<head>
 		<link rel="shortcut icon" href="/static/everyone/everyone.png" />
 		<title>Everyone is stupid except for me</title>
+		<script src="/static/poltergeist.js"></script>
 		<meta property="og:title" content="Everyone is stupid except for me" />
 		<meta property="og:image" content="/static/everyone/everyone.png" />
 	</head>
-	<body>
+	<body onload="set_mp3_source('everyone')">
 		<p align="center"><img src="/static/everyone/everyone.png" /></p>
-		<p align="center"><audio controls><source src="/static/everyone/everyone.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls id="player"><source src="/static/everyone/everyone.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

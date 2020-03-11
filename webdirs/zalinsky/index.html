@@ -1,9 +1,10 @@
 <html>
 	<head>
 		<title>Tommy Boy - Zalinsky The Auto Parts King</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
+	<body onload="set_mp3_source('zalinsky')">
 <!--		<p align="center"><img src='@imgfile@' /></p>-->
-		<p align="center"><audio controls><source src="/static/zalinsky/zalinsky.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls id="player"><source src="/static/zalinsky/zalinsky.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

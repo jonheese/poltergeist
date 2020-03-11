@@ -1,8 +1,9 @@
 <html>
 	<head>
 		<title>So You're Tellin' Me There's a Chance</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
-		<p align="center"><audio controls><source src="/static/chance/chance.mp3" type="audio/mpeg"></audio></p>
+	<body onload="set_mp3_source('chance')">
+		<p align="center"><audio controls id="player"><source src="/static/chance/chance.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

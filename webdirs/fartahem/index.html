@@ -1,8 +1,9 @@
 <html>
 	<head>
 		<title>Good Morning!</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
-		<p align="center"><audio controls><source src="/static/fartahem/fartahem.mp3" type="audio/mpeg"></audio></p>
+	<body onload="set_mp3_source('fartahem')">
+		<p align="center"><audio controls id="player"><source src="/static/fartahem/fartahem.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

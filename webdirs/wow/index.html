@@ -2,11 +2,12 @@
 	<head>
 		<link rel="shortcut icon" href="/static/wow/wow.jpg" />
 		<title>Wow!</title>
+		<script src="/static/poltergeist.js"></script>
 		<meta property="og:title" content="Wow!" />
 		<meta property="og:image" content="/static/wow/wow.gif" />
 	</head>
-	<body>
+	<body onload="set_mp3_source('wow')">
 		<p align="center"><img src="/static/wow/wow.gif" /></p>
-		<p align="center"><audio controls><source src="/static/wow/wow.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls id="player"><source src="/static/wow/wow.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

@@ -1,8 +1,9 @@
 <html>
 	<head>
 		<title>You Don't Know Jack Shit!</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
-		<p align="center"><audio controls><source src="/static/jackshit/jackshit.mp3" type="audio/mpeg"></audio></p>
+	<body onload="set_mp3_source('jackshit')">
+		<p align="center"><audio controls id="player"><source src="/static/jackshit/jackshit.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

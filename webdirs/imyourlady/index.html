@@ -1,8 +1,9 @@
 <html>
 	<head>
 		<title>Celine Dion - I'm Your Lady</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
-		<p align="center"><audio controls><source src="/static/imyourlady/imyourlady.mp3" type="audio/mpeg"></audio></p>
+	<body onload="set_mp3_source('imyourlady')">
+		<p align="center"><audio controls id="player"><source src="/static/imyourlady/imyourlady.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

@@ -1,8 +1,9 @@
 <html>
 	<head>
 		<title>Mmkay!</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
-		<p align="center"><audio controls><source src="/static/mmkay/mmkay.mp3" type="audio/mpeg"></audio></p>
+	<body onload="set_mp3_source('mmkay')">
+		<p align="center"><audio controls id="player"><source src="/static/mmkay/mmkay.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

@@ -1,8 +1,9 @@
 <html>
 	<head>
 		<title>You Don't Always Die From Tobacco!</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
-		<p align="center"><audio controls><source src="/static/tobacco/tobacco.mp3" type="audio/mpeg"></audio></p>
+	<body onload="set_mp3_source('tobacco')">
+		<p align="center"><audio controls id="player"><source src="/static/tobacco/tobacco.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

@@ -1,11 +1,12 @@
 <html>
 	<head>
 		<title>You son of a bitch!</title>
+		<script src="/static/poltergeist.js"></script>
 		<meta property="og:title" content="You son of a bitch!"/>
 		<meta property="og:image" content="/static/sonofa/sonofa.jpg"/>
 	</head>
-	<body>
+	<body onload="set_mp3_source('sonofa')">
 		<p align="center"><img src="/static/sonofa/sonofa.jpg"/></p>
-		<p align="center"><audio controls><source src="/static/sonofa/sonofa.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls id="player"><source src="/static/sonofa/sonofa.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

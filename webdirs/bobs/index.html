@@ -1,11 +1,12 @@
 <html>
 	<head>
 		<title>The Bobs</title>
+		<script src="/static/poltergeist.js"></script>
 		<meta property="og:title" content="The Bobs" />
 		<meta property="og:image" content="/static/bobs/bobs.jpg" />
 	</head>
-	<body>
+	<body onload="set_mp3_source('bobs')">
 		<p align="center"><img src="/static/bobs/bobs.jpg" /></p>
-		<p align="center"><audio controls><source src="/static/bobs/bobs.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls id="player"><source src="/static/bobs/bobs.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

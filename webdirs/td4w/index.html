@@ -2,8 +2,9 @@
 	<head>
 		<link rel="shortcut icon" href="/static/td4w/td4w.png" />
 		<title>Turn Down For What</title>
+		<script src="/static/poltergeist.js"></script>
 	</head>
-	<body>
-		<p align="center"><audio controls><source src="/static/td4w/td4w.mp3" type="audio/mpeg"></audio></p>
+	<body onload="set_mp3_source('td4w')">
+		<p align="center"><audio controls id="player"><source src="/static/td4w/td4w.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>

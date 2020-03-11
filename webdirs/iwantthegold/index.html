@@ -2,11 +2,12 @@
 	<head>
 		<link rel="shortcut icon" href="/static/iwantthegold/iwantthegold-small.png" />
 		<title>I Want the Gold</title>
+		<script src="/static/poltergeist.js"></script>
 		<meta property="og:title" content="I Want the Gold" />
 		<meta property="og:image" content="/static/iwantthegold/iwantthegold.png" />
 	</head>
-	<body>
+	<body onload="set_mp3_source('iwantthegold')">
 		<p align="center"><img src="/static/iwantthegold/iwantthegold.png" /></p>
-		<p align="center"><audio controls><source src="/static/iwantthegold/iwantthegold.mp3" type="audio/mpeg"></audio></p>
+		<p align="center"><audio controls id="player"><source src="/static/iwantthegold/iwantthegold.mp3" type="audio/mpeg"></audio></p>
 	</body>
 </html>
