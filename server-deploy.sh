@@ -34,6 +34,9 @@ function deploy() {
     echo "Chowning directories${onstring}..."
     do_cmd chown -R www-data:www-data /var/www/poltergeist/
     do_cmd chown -R www-data:www-data /opt/poltergeist/webdirs/
+    
+    echo "Generating list index${onstring}..."
+    do_cmd /opt/poltergeist/webdirs/list/get-sites.sh > /opt/poltergeist/webdirs/list/index.html.import && chown www-data:www-data /opt/poltergeist/webdirs/list/index.html.import && mv /opt/poltergeist/webdirs/list/index.html.import /opt/poltergeist/webdirs/list/index.html
 
     echo "Restarting apache2 service${onstring}..."
     do_cmd systemctl restart apache2
