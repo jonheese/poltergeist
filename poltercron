@@ -1,2 +1,2 @@
-*/3 * * * * root /var/www/list/get-sites.sh > /var/www/list/index.html.import && mv /var/www/list/index.html.import /var/www/list/index.html
+*/3 * * * * root /opt/poltergeist/webdirs/list/get-sites.sh > /opt/poltergeist/webdirs/list/index.html.import && chown www-data:www-data /opt/poltergeist/webdirs/list/index.html.import && mv /opt/poltergeist/webdirs/list/index.html.import /opt/poltergeist/webdirs/list/index.html
 */5 * * * * root /root/bin/update-poltergeist.sh >/dev/null 2>&1
