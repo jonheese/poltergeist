@@ -33,6 +33,7 @@ function deploy() {
 
     echo "Chowning directories${onstring}..."
     do_cmd chown -R www-data:www-data /var/www/poltergeist/
+    do_cmd chown -R www-data:www-data /opt/poltergeist/webdirs/
 
     echo "Restarting apache2 service${onstring}..."
     do_cmd systemctl restart apache2
