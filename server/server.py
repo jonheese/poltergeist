@@ -69,18 +69,22 @@ def submit_command(clip_name=None, queue_name=None):
         else:
             return jsonify(status = "I couldn't find the queue_name for the URL you requested: %s" % domain), 404
 
-
+    split_domain = domain.split(".")
     if not clip_name:
-        clip_name = domain.split(".")[0]
+        clip_name = split_domain[0]
 
     if (clip_name.lower() == "friday" and datetime.today().weekday() != 4) or \
             ((clip_name.lower() == "lastchristmas" or clip_name.lower() == "jinglebell") and datetime.today().month != 12) or \
             (clip_name.lower() == "mondays" and datetime.today().weekday() != 0):
         return '<html><body><p align="center"><img src="/static/stahp.jpg" /></p></body></html>'
-    put_command(queue_name, clip_name)
+    if split_domain[1] != "sh":
+        put_command(queue_name, clip_name)
+        meta_url = "http://%s.sh.%s/" % (clip_name, ".".join(split_domain[1:]))
+    else:
+        meta_url = "http://%s/" % domain
 
     try:
-        return render_template('%s/index.html' % clip_name)
+        return render_template('%s/index.html' % clip_name, meta_url=meta_url)
     except TemplateNotFound:
         return render_template("notfound.html")
 
