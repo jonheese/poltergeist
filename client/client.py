@@ -1,11 +1,52 @@
 #!/usr/bin/env PYTHONUNBUFFERED=1 python3
 
-import requests, json, os.path, sys, time, glob, random
+import requests, json, sys, time, glob, random
+import os
 from subprocess import call, check_output
 from requests.exceptions import ReadTimeout
 
 
 checkpoint = 0
+
+
+def play_speech(text):
+    global google_translate_limit, play_cmd, play_options
+    parcel_index = 0
+    if len(text) > google_translate_limit:
+        char_count = 0
+        index = 0
+        parcel = []
+        for word in text.split():
+            char_count += len(word) + 1
+            if char_count > google_translate_limit:
+                get_speech_file(parcel, parcel_index)
+                parcel = [word]
+                char_count = len(word) + 1
+                parcel_index += 1
+            else:
+                parcel.append(word)
+                index += 1
+        get_speech_file(parcel, parcel_index)
+    else:
+        get_speech_file([text], parcel_index)
+    call("cat /tmp/speech[0-9]*.mp3 > /tmp/speech.mp3", shell=True)
+    call(f"{play_cmd} /tmp/speech.mp3 {play_options}", shell=True)
+    #for index in range(parcel_index):
+    #    os.remove(f"/tmp/speech{index}.mp3")
+    #os.remove("/tmp/speech.mp3")
+    call("rm -f /tmp/speech*.mp3", shell=True)
+
+
+
+def get_speech_file(parcel, parcel_index):
+    words = " ".join(parcel)
+    headers = { 'User-Agent': 'Mozilla' }
+    url = f"http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q={words}&tl=En-us"
+    filename = f"/tmp/speech{parcel_index}.mp3"
+    response = requests.get(url=url, headers=headers, stream=True)
+    with open (filename, 'wb') as f:
+        for chunk in response.iter_content(chunk_size=1024):
+            f.write(chunk)
 
 
 def do_command(data):
@@ -29,7 +70,9 @@ def do_command(data):
             else:
                 if verbosity > 1:
                     print("clip %s command received" % clip)
-                if os.path.isdir("%s%s%s" % (clip_dir, os.path.sep, clip)):
+                if clip.startswith("speech"):
+                    play_speech(" ".join(clip.split()[1:]))
+                elif os.path.isdir("%s%s%s" % (clip_dir, os.path.sep, clip)):
                     clip_file = "%s%s%s%s%s.mp3" % (clip_dir, os.path.sep, clip, os.path.sep, clip)
                     if not os.path.exists(clip_file):
                         if verbosity > 1:
@@ -93,7 +136,8 @@ def process_quiet_queue(dummy):
 
 def get_config():
     global config_file, config, schema, server, port, client_id, poltergeist_dir, clip_dir, play_cmd, \
-            play_unkillable_cmd, cmd_to_kill, killall_cmd, play_options, verbosity
+            play_unkillable_cmd, cmd_to_kill, killall_cmd, play_options, verbosity, \
+            google_translate_limit
 
     if not config_file:
         if not os.path.isfile('config.json'):
@@ -117,7 +161,7 @@ def get_config():
         print("Using config file %s" % config_file)
 
     config = json.load(open(config_file))
-    schema = configi.get("schema", "http")
+    schema = config.get("schema", "http")
     server = config.get("server", "localhost")
     port = config.get("port", 80)
     client_id = config.get("client_id", check_output("hostname"))
@@ -128,7 +172,8 @@ def get_config():
     play_options = config.get("play_options", "pad 30000s@0:00 >/dev/null 2>&1")
     cmd_to_kill = config.get("cmd_to_kill", config.get("kill_cmd", "play"))
     killall_cmd = config.get("killall_cmd", "killall")
-    verbosity = int(config.get("verbosity", 1)
+    verbosity = int(config.get("verbosity", 1))
+    google_translate_limit = int(config.get("google_translate_limit", 100))
     if config.get("debug"):
         verbosity = 2
     if config.get("quiet"):

@@ -89,6 +89,14 @@ def submit_command(clip_name=None, queue_name=None):
         return render_template("notfound.html")
 
 
+@app.route('/speech', methods=['POST'])
+def queue_speech():
+    text = request.form.get('text')
+    if text is None:
+        return render_template("notfound.html")
+    put_command("inetu-hdmi19", "speech %s" % text)
+
+
 def put_command(queue_name, clip_name):
     timestamp = time.time()
     target_key = '%s:clip:%s:%s' % (qkey, queue_name, timestamp)
@@ -97,7 +105,7 @@ def put_command(queue_name, clip_name):
 
 @app.route('/alexa', methods=['POST'])
 def handle_alexa_request():
-    print json.dumps(request.json, indent=2)
+    print(json.dumps(request.json, indent=2))
     data = request.json
     request_type = data["request"]["type"]
     if request_type == "IntentRequest":
