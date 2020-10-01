@@ -1,4 +1,4 @@
-#!/usr/bin/env PYTHONUNBUFFERED=1 python
+#!/usr/bin/env PYTHONUNBUFFERED=1 python3
 
 import requests, json, os.path, sys, time, glob, random
 from subprocess import call, check_output
@@ -65,7 +65,7 @@ def do_command(data):
 
 
 def process_quiet_queue(dummy):
-    global clip_dir, quiet_queue, kill_cmd, killall_cmd, verbosity
+    global clip_dir, quiet_queue, cmd_to_kill, killall_cmd, verbosity
     if verbosity > 1:
         print("Starting up quiet queue")
     try:
@@ -78,7 +78,7 @@ def process_quiet_queue(dummy):
                         if clip == "quiet_all":
                             call(["killall", play_unkillable_cmd])
                         full_kill_cmd = killall_cmd.split(" ")
-                        full_kill_cmd.append(kill_cmd)
+                        full_kill_cmd.append(cmd_to_kill)
                         call(full_kill_cmd)
                     except OSError as e:
                         # We don't care if the killall command fails
@@ -93,7 +93,7 @@ def process_quiet_queue(dummy):
 
 def get_config():
     global config_file, config, schema, server, port, client_id, poltergeist_dir, clip_dir, play_cmd, \
-            play_unkillable_cmd, kill_cmd, killall_cmd, play_options, verbosity
+            play_unkillable_cmd, cmd_to_kill, killall_cmd, play_options, verbosity
 
     if not config_file:
         if not os.path.isfile('config.json'):
@@ -117,21 +117,21 @@ def get_config():
         print("Using config file %s" % config_file)
 
     config = json.load(open(config_file))
-    schema = config["schema"] if "schema" in list(config.keys()) else "http"
-    server = config["server"] if "server" in list(config.keys()) else "localhost"
-    port = config["port"] if "port" in list(config.keys()) else 80
-    client_id = config["client_id"] if "client_id" in config else check_output("hostname")
-    poltergeist_dir = config["poltergeist_dir"] if "poltergeist_dir" in list(config.keys()) else "/root/poltergeist"
-    clip_dir = config["clip_dir"] if "clip_dir" in list(config.keys()) else "/var/www"
-    play_cmd = config["play_cmd"] if "play_cmd" in list(config.keys()) else "/usr/bin/play"
-    play_unkillable_cmd = config["play_unkillable_cmd"] if "play_unkillable_cmd" in list(config.keys()) else "/usr/bin/play-unkillable"
-    play_options = config["play_options"] if "play_options" in list(config.keys()) else "pad 30000s@0:00 >/dev/null 2>&1"
-    kill_cmd = config["kill_cmd"] if "kill_cmd" in list(config.keys()) else "play"
-    killall_cmd = config["killall_cmd"] if "killall_cmd" in list(config.keys()) else "killall"
-    verbosity = int(config["verbosity"]) if "verbosity" in list(config.keys()) else 1
-    if "debug" in list(config.keys()) and bool(config["debug"]):
+    schema = configi.get("schema", "http")
+    server = config.get("server", "localhost")
+    port = config.get("port", 80)
+    client_id = config.get("client_id", check_output("hostname"))
+    poltergeist_dir = config.get("poltergeist_dir", "/root/poltergeist")
+    clip_dir = config.get("clip_dir", "/var/www")
+    play_cmd = config.get("play_cmd", "/usr/bin/play")
+    play_unkillable_cmd = config.get("play_unkillable_cmd", "/usr/bin/play-unkillable")
+    play_options = config.get("play_options", "pad 30000s@0:00 >/dev/null 2>&1")
+    cmd_to_kill = config.get("cmd_to_kill", config.get("kill_cmd", "play"))
+    killall_cmd = config.get("killall_cmd", "killall")
+    verbosity = int(config.get("verbosity", 1)
+    if config.get("debug"):
         verbosity = 2
-    if "quiet" in list(config.keys()) and bool(config["quiet"]):
+    if config.get("quiet"):
         verbosity = 0
 
 config_file = None

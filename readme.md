@@ -4,7 +4,7 @@ Makes TVs (and other computers) talk to you
 Poltergeist uses a server/client architecture, where there is a single server to which clients connect and subscribe to sound clip events from a queue.  You probably want to run a client (runs on your local machine, waits for sound clip events and plays the sound clips for you).
 
 ## Client Installation
-### Linux (Ubuntu 18.04+ or RHEL/CentOS 7+ or Fedora (with systemd))
+### Linux (Ubuntu 18.04+ or RHEL/CentOS 7+ or Fedora or Raspbian (with systemd))
 ```
 cd poltergeist/client
 mkdir ~/.poltergeist
