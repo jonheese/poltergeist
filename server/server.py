@@ -95,6 +95,7 @@ def queue_speech():
     if text is None:
         return render_template("notfound.html")
     put_command("inetu-hdmi19", "speech %s" % text)
+    return render_template('speech/index.html')
 
 
 def put_command(queue_name, clip_name):
