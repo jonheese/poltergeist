@@ -12,6 +12,7 @@ checkpoint = 0
 def play_speech(text):
     global google_translate_limit, play_cmd, play_options
     parcel_index = 0
+    text = text.replace("@COLON@", ":")
     if len(text) > google_translate_limit:
         char_count = 0
         index = 0

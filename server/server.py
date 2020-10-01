@@ -91,7 +91,7 @@ def submit_command(clip_name=None, queue_name=None):
 
 @app.route('/speech', methods=['POST'])
 def queue_speech():
-    text = request.form.get('text')
+    text = request.form.get('text').replace(':', '@COLON@')
     if text is None:
         return render_template("notfound.html")
     put_command("inetu-hdmi19", "speech %s" % text)
