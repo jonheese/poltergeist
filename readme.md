@@ -3,8 +3,11 @@ Makes TVs (and other computers) talk to you
 
 Poltergeist uses a server/client architecture, where there is a single server to which clients connect and subscribe to sound clip events from a queue.  You probably want to run a client (runs on your local machine, waits for sound clip events and plays the sound clips for you).
 
+NOTE: Poltergeist *_requires_* Python 3.x.  On Linux it will be installed for you if not already present.
+
 ## Client Installation
-### Linux (Ubuntu 18.04+ or RHEL/CentOS 7+ or Fedora (with systemd))
+### Linux
+Should work on Ubuntu 18.04+, Debian 8+, RHEL/CentOS 7+, Fedora, or Raspbian (really, any Linux with systemd and either `yum` or `apt`).
 ```
 cd poltergeist/client
 mkdir ~/.poltergeist
@@ -17,17 +20,17 @@ cp config-dist.json ~/.poltergeist/config.json
 #    "play_cmd": "/usr/bin/play",
 #    "play_unkillable_cmd": "/usr/bin/play",
 #    "play_options": "pad 30000s@0:00 >/dev/null 2>&1",
-#    "kill_cmd": "play",
 #    "killall_cmd": "killall",
+#    "cmd_to_kill": "play",
 #    "debug": false,
 #    "quiet": true
 #
-./install-client.sh # provide sudo password
+./install-client.sh # provide sudo password, if not root
 systemctl start poltergeist-client
 ```
 To uninstall:
 ```
-./uninstall-client.sh # provide sudo password
+./uninstall-client.sh # provide sudo password, if not root
 ```
 
 ### MacOS
@@ -43,26 +46,26 @@ cp config-dist.json ~/.poltergeist/config.json
 #    "play_cmd": "/usr/bin/afplay",
 #    "play_unkillable_cmd": "/usr/bin/afplay",
 #    "play_options": ">/dev/null 2>&1",
-#    "kill_cmd": "afplay",
 #    "killall_cmd": "killall",
+#    "cmd_to_kill": "afplay",
 #    "debug": false,
 #    "quiet": true
 #
-./install-client.sh # provide sudo password
+./install-client.sh # provide sudo password, if not root
 lanchctl load /Library/LaunchAgents/com.jonheese.poltergeist-client.plist
 ```
 To uninstall:
 ```
-./uninstall-client.sh # provide sudo password
+./uninstall-client.sh # provide sudo password, if not root
 ```
 
 ### Windows
-NOTE: You will need to install Python and add its bin directory to your `%PATH%` before any of this will work on Windows.
+NOTE: You will need to install Python 3.x and add its bin directory to your `%PATH%` before any of this will work on Windows.
 
-NOTE: You will also need to install the `requests` Python.  This can usually be done by running
+NOTE: You will also need to install the `requests` Python package.  This can usually be done by running
 ```pip.exe install -y requests```
 
-NOTE: Due to the way that Windows services interact with audio devices, the Windows client is simply run in the background and must be manually stopped.  Scripts are provided to do this, and the starting can be automated using Windows startup features. 
+NOTE: Due to the way that Windows services interact with audio devices (read: poorly, if at all), the Windows client is simply run as a standard background processd and must be manually stopped.  Scripts are provided to do this, and the starting can be automated using Windows startup features. 
 ```
 cd poltergeist\client
 mkdir %appdata%\.poltergeist
@@ -74,8 +77,8 @@ cp config-dist.json %appdata%\.poltergeist\config.json
 #    "clip_dir": "c:\\Path\\to\\poltergeist\\webdirs",
 #    "play_cmd": "c:\\Path\\to\\poltergeist\\tools\\cmdmp3win.exe",
 #    "play_unkillable_cmd": "c:\\Path\\to\\poltergeist\\tools\\cmdmp3win.exe",
-#    "kill_cmd": "cmdmp3win.exe",
 #    "killall_cmd": "c:\\Windows\\system32\\taskkill.exe -F -T -IM",
+#    "cmd_to_kill": "cmdmp3win.exe",
 #    "play_options": "",
 #    "debug": false,
 #    "quiet": true
@@ -94,10 +97,10 @@ cp config-dist.json %appdata%\.poltergeist\config.json
 ```
 
 ## Keeping your content updated
-It is recommended that you schedule `git pull`s on a regular basis (via `cron` or Task Scheduled) to ensure that you have the latest sound clip files.  This is left as an exercise for the reader.
+It is recommended that you schedule `git pull`s on a regular basis (via `cron` or Task Scheduler) to ensure that you have the latest sound clip files.  This is left as an exercise for the reader.
 
 ## Adding your own content
-### Using the automatic deploy script (`addsite.sh`)
+### Using the automatic server deploy script (`addsite.sh`)
 1. Check out this project:
     ```
     $ git clone <clone_url>
@@ -120,7 +123,7 @@ It is recommended that you schedule `git pull`s on a regular basis (via `cron` o
 5. If you want to make any further customizations to make before committing (eg. any special logic in the `index.php` or something), enter `y`, make those changes, then commit, push, deploy (see below).
 6. If you have no further customizations to make, enter `n` and the script will automatically add, commit, and push.
 
-### Manual Deploy Steps ###
+### Manual Server Deploy Steps ###
 If you had additional customizations to be made before committing in the steps above, you can commit, push, and deploy with the following commands:
 ```
 git add .
