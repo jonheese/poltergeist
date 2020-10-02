@@ -194,7 +194,7 @@ class PoltergeistClient():
     def __handle_clip_lifetime(self, clip):
         timestamp = float(clip.split(":")[1])
         if timestamp <= self.checkpoint:
-            if timestamp + 60 <= time.time():
+            if timestamp + 30 <= time.time():
                 requests.get(
                     "%s://%s:%s/delete/poltergeist:clip:%s:%s" %
                     (
@@ -202,7 +202,7 @@ class PoltergeistClient():
                         self.server,
                         self.port,
                         self.client_id,
-                        self.timestamp
+                        timestamp
                     )
                 )
             return True
@@ -216,6 +216,10 @@ class PoltergeistClient():
         if "clips" in list(data.keys()):
             for clip in data["clips"]:
                 if self.__handle_clip_lifetime(clip):
+                    clip_played = True
+                    self._log.debug(
+                        "Skipping clip %s because it already played" % clip
+                    )
                     continue
                 clip = clip.split(":")[0]
                 if clip == "quiet" or clip == "quiet_all":
