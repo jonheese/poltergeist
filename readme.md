@@ -3,7 +3,7 @@ Makes TVs (and other computers) talk to you
 
 Poltergeist uses a server/client architecture, where there is a single server to which clients connect and subscribe to sound clip events from a queue.  You probably want to run a client (runs on your local machine, waits for sound clip events and plays the sound clips for you).
 
-NOTE: Poltergeist *_requires_* Python 3.x.  On Linux it will be installed for you if not already present.
+NOTE: Poltergeist can run on Python 2.7 or 3.x, although 3.x is preferred and support for 2.7 will be deprecated at some point in the future.
 
 ## Client Installation
 ### Linux
@@ -14,6 +14,9 @@ mkdir ~/.poltergeist
 cp config-dist.json ~/.poltergeist/config.json
 # edit ~/.poltergeist/config.json, filling in the appropriate values, here are some suggestions:
 #
+#    "schema" : "http",
+#    "server" : "your.poltergeist.server.com",
+#    "port": 80,
 #    "client_id": "inetu-hdmi19",
 #    "poltergeist_dir": "/path/to/poltergeist",
 #    "clip_dir": "/path/to/poltergeist/webdirs",
@@ -40,6 +43,9 @@ mkdir ~/.poltergeist
 cp config-dist.json ~/.poltergeist/config.json
 # edit ~/.poltergeist/config.json, filling in the appropriate values, here are some suggestions:
 #
+#    "schema" : "http",
+#    "server" : "your.poltergeist.server.com",
+#    "port": 80,
 #    "client_id": "inetu-hdmi19",
 #    "poltergeist_dir": "/path/to/poltergeist",
 #    "clip_dir": "/path/to/poltergeist/webdirs",
@@ -72,6 +78,9 @@ mkdir %appdata%\.poltergeist
 cp config-dist.json %appdata%\.poltergeist\config.json
 # edit %appdata%\.poltergeist\config.json, filling in the appropriate values, here are some suggestions:
 #
+#    "schema" : "http",
+#    "server" : "your.poltergeist.server.com",
+#    "port": 80,
 #    "client_id": "inetu-hdmi19",
 #    "poltergeist_dir": "c:\\Path\\to\\poltergeist",
 #    "clip_dir": "c:\\Path\\to\\poltergeist\\webdirs",

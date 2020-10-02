@@ -30,10 +30,10 @@ else
 	if [ -n "$apt" ] ; then
 		# Ubuntu/Debian
 		sudo apt update
-		sudo apt install -y python3 sox libsox-fmt-mp3 python-pip
+		sudo apt install -y sox libsox-fmt-mp3 python-pip
 	else
 		# RHEL/CentOS
-		sudo yum install -y python3 sox python-pip
+		sudo yum install -y sox python-pip
 		echo "++++++++++++ YOU WILL NEED TO FIND/BUILD/INSTALL AN MP3 CODEC FOR sox BEFORE THIS WILL PLAY ++++++++++++"
 	fi
 	sudo pip install -y requests

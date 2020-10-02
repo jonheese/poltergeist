@@ -1,4 +1,4 @@
-#!/usr/bin/env PYTHONUNBUFFERED=1 python3
+#!/usr/bin/env PYTHONUNBUFFERED=1 python
 
 import requests, json, sys, time, glob, random
 import os
@@ -31,10 +31,7 @@ def play_speech(text):
     else:
         get_speech_file([text], parcel_index)
     call("cat /tmp/speech[0-9]*.mp3 > /tmp/speech.mp3", shell=True)
-    call(f"{play_cmd} /tmp/speech.mp3 {play_options}", shell=True)
-    #for index in range(parcel_index):
-    #    os.remove(f"/tmp/speech{index}.mp3")
-    #os.remove("/tmp/speech.mp3")
+    call("%s /tmp/speech.mp3 %s" % (play_cmd, play_options), shell=True)
     call("rm -f /tmp/speech*.mp3", shell=True)
 
 
@@ -42,8 +39,8 @@ def play_speech(text):
 def get_speech_file(parcel, parcel_index):
     words = " ".join(parcel)
     headers = { 'User-Agent': 'Mozilla' }
-    url = f"http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q={words}&tl=En-us"
-    filename = f"/tmp/speech{parcel_index}.mp3"
+    url = "http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%s&tl=En-us" % words
+    filename = "/tmp/speech%s.mp3" % parcel_index
     response = requests.get(url=url, headers=headers, stream=True)
     with open (filename, 'wb') as f:
         for chunk in response.iter_content(chunk_size=1024):
