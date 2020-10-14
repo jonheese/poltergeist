@@ -1,6 +1,6 @@
 import json, uuid, time
 from redis import Redis
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, make_response, render_template
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from jinja2 import TemplateNotFound
