@@ -22,7 +22,7 @@ def get_commands(queue_name):
     start_time = time.time()
     while len(clips) == 0 and time.time() - start_time < 60:
         for key in redis.scan_iter(target_key+":*"):
-            clip = redis.get(key)
+            clip = redis.get(key).decode("utf-8")
             clips.append(clip)
             if clip.startswith("quiet:") or clip.startswith("quiet_all:"):
                 clips = [ clip ]
