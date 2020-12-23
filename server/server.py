@@ -1,4 +1,5 @@
-import json, uuid, time
+import json
+import time
 from redis import Redis
 from flask import Flask, request, jsonify, make_response, render_template
 from flask_limiter import Limiter
@@ -25,7 +26,7 @@ def get_commands(queue_name):
             clip = redis.get(key).decode("utf-8")
             clips.append(clip)
             if clip.startswith("quiet:") or clip.startswith("quiet_all:"):
-                clips = [ clip ]
+                clips = [clip]
                 break
         time.sleep(0.05)
     return json.dumps({"clips": clips})
@@ -67,16 +68,30 @@ def submit_command(clip_name=None, queue_name=None):
         elif domain.endswith("inetu.org") or domain.endswith("jonheese.com"):
             queue_name = "inetu-hdmi19"
         else:
-            return jsonify(status = "I couldn't find the queue_name for the URL you requested: %s" % domain), 404
+            return jsonify(status="I couldn't find the queue_name for the " +
+                           "URL you requested: %s" % domain), 404
 
     split_domain = domain.split(".")
     if not clip_name:
         clip_name = split_domain[0]
 
     if (clip_name.lower() == "friday" and datetime.today().weekday() != 4) or \
-            ((clip_name.lower() == "lastchristmas" or clip_name.lower() == "jinglebell") and datetime.today().month != 12) or \
-            (clip_name.lower() == "mondays" and datetime.today().weekday() != 0):
-        return '<html><body><p align="center"><img src="/static/stahp.jpg" /></p></body></html>'
+            ((clip_name.lower() == "lastchristmas" or
+              clip_name.lower() == "jinglebell") and
+             datetime.today().month != 12) or \
+            (clip_name.lower() == "mondays" and
+             datetime.today().weekday() != 0):
+        return """
+ <html>
+    <head>
+        <title>He need some milk!</title>
+        <meta property="og:title" content="Oh no you didn't!"/>
+        <meta property="og:image" content="/static/stahp.jpg"/>
+    </head>
+    <body>
+        <p align="center"><img height="100%" src="/static/stahp.jpg" /></p>
+    </body>
+</html>"""
     if split_domain[1] != "sh":
         put_command(queue_name, clip_name)
         meta_url = "http://%s.sh.%s/" % (clip_name, ".".join(split_domain[1:]))
@@ -110,11 +125,13 @@ def handle_alexa_request():
     data = request.json
     request_type = data["request"]["type"]
     if request_type == "IntentRequest":
-        clip_name = data["request"]["intent"]["slots"]["clip"]["value"].replace(" ", "").lower()
+        clip_name = data["request"]["intent"]["slots"]["clip"]["value"]
+        clip_name = clip_name.replace(" ", "").lower()
         put_command("inetu-hdmi19", clip_name)
         return generate_response("Okay")
     else:
         return generate_response("I couldn't find that clip")
+
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
@@ -125,7 +142,13 @@ def ratelimit_handler(e):
     """, 429)
 
 
-def generate_response(output_speech, card_title="", card_subtitle="", card_content="", endSession=True):
+def generate_response(
+        output_speech,
+        card_title="",
+        card_subtitle="",
+        card_content="",
+        endSession=True
+):
     response = {
         "version": "1.0",
         "sessionAttributes": {
