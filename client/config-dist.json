@@ -11,5 +11,7 @@
     "killall_cmd": "killall",
     "cmd_to_kill": "play",
     "debug": false,
-    "quiet": false
+    "quiet": false,
+    "arm_time": "7:00",
+    "disarm_time": "17:00"
 }

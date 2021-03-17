@@ -6,6 +6,9 @@ Poltergeist uses a server/client architecture, where there is a single server to
 NOTE: Poltergeist can run on Python 2.7 or 3.x, although 3.x is preferred and support for 2.7 will be deprecated at some point in the future.
 
 ## Client Installation
+### Arming/Disarming Time
+The settings `arm_time` and `disarm_time` are optional and tell the Poltergeist client when you want sound clips to be played.  If you do not specify either of them, sound clips will be played 24x7 on demand.  If you specify _either_ of them, sound clips will only be played after the `arm_time` and before the `disarm_time`, with the default value for `arm_time` being `7:00` and `disarm_time` being `17:00`.
+
 ### Linux
 Should work on Ubuntu 18.04+, Debian 8+, RHEL/CentOS 7+, Fedora, or Raspbian (really, any Linux with systemd and either `yum` or `apt`).
 ```
@@ -26,7 +29,9 @@ cp config-dist.json ~/.poltergeist/config.json
 #    "killall_cmd": "killall",
 #    "cmd_to_kill": "play",
 #    "debug": false,
-#    "quiet": true
+#    "quiet": true,
+#    "arm_time": "7:00",
+#    "disarm_time": "17:00"
 #
 ./install-client.sh # provide sudo password, if not root
 systemctl start poltergeist-client
@@ -55,7 +60,9 @@ cp config-dist.json ~/.poltergeist/config.json
 #    "killall_cmd": "killall",
 #    "cmd_to_kill": "afplay",
 #    "debug": false,
-#    "quiet": true
+#    "quiet": true,
+#    "arm_time": "7:00",
+#    "disarm_time": "17:00"
 #
 ./install-client.sh # provide sudo password, if not root
 lanchctl load /Library/LaunchAgents/com.jonheese.poltergeist-client.plist
@@ -90,7 +97,9 @@ cp config-dist.json %appdata%\.poltergeist\config.json
 #    "cmd_to_kill": "cmdmp3win.exe",
 #    "play_options": "",
 #    "debug": false,
-#    "quiet": true
+#    "quiet": true,
+#    "arm_time": "7:00",
+#    "disarm_time": "17:00"
 #
 # edit start-poltergeist.ps1 and fill in the path to the pythonw.exe binary on your system
 ```

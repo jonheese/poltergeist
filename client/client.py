@@ -8,6 +8,8 @@ import random
 import requests
 import sys
 import time
+import traceback
+from datetime import datetime
 from subprocess import call, check_output
 from requests.exceptions import ReadTimeout
 
@@ -81,6 +83,28 @@ class PoltergeistClient():
                                     "play"
                                 )
                            )
+        if config.get("arm_time"):
+            try:
+                self.arm_time = datetime.strptime(
+                    config.get("arm_time"),
+                    "%H:%M"
+                )
+            except Exception:
+                print(traceback.format_exc())
+                self.arm_time = None
+        else:
+            self.arm_time = None
+        if config.get("disarm_time"):
+            try:
+                self.disarm_time = datetime.strptime(
+                    config.get("disarm_time"),
+                    "%H:%M"
+                )
+            except Exception:
+                print(traceback.format_exc())
+                self.disarm_time = None
+        else:
+            self.disarm_time = None
         self.killall_cmd = config.get("killall_cmd", "killall")
         verbosity = int(config.get("verbosity", 1))
         self.google_translate_limit = int(config.get(
@@ -211,6 +235,39 @@ class PoltergeistClient():
         return False
 
     def __do_command(self, data):
+        play = True
+        if self.arm_time is not None or self.disarm_time is not None:
+            cur_time = datetime.now()
+            if not self.arm_time:
+                self.arm_time = cur_time.replace(hour=7)
+            if not self.disarm_time:
+                self.disarm_time = cur_time.replace(hour=17)
+            self.arm_time = cur_time.replace(
+                hour=self.arm_time.hour,
+                minute=self.arm_time.minute,
+            )
+            self.disarm_time = cur_time.replace(
+                hour=self.disarm_time.hour,
+                minute=self.disarm_time.minute,
+            )
+            if self.arm_time > self.disarm_time:
+                # Overnight arming
+                if self.disarm_time < cur_time <= self.arm_time:
+                    # We are disarmed
+                    print("It is not before %s or after %s, skipping" % (
+                        self.disarm_time.strftime("%H:%M"),
+                        self.arm_time.strftime("%H:%M"),
+                    ))
+                    play = False
+            else:
+                # Daytime arming
+                if cur_time < self.arm_time or self.disarm_time <= cur_time:
+                    # We are disarmed
+                    print("It is outside the %s - %s time window, skipping" % (
+                        self.arm_time.strftime("%H:%M"),
+                        self.disarm_time.strftime("%H:%M"),
+                    ))
+                    play = False
         clip_played = False
         self._log.debug(json.dumps(data, indent=2))
         if "clips" in list(data.keys()):
@@ -227,16 +284,19 @@ class PoltergeistClient():
                     self._log.info("Put %s in the queue" % clip)
                 else:
                     self._log.debug("clip %s command received" % clip)
-                    if clip.startswith("speech"):
-                        clip_played = self.__play_speech(
-                            " ".join(clip.split()[1:])
-                        )
+                    if play:
+                        if clip.startswith("speech"):
+                            clip_played = self.__play_speech(
+                                " ".join(clip.split()[1:])
+                            )
+                        else:
+                            clip_played = self.__play_clip(clip)
                     else:
-                        clip_played = self.__play_clip(clip)
-            if not clip_played:
-                self._log.error(
-                    "Couldn't find site for clip %s" % clip
-                )
+                        continue
+                if not clip_played:
+                    self._log.error(
+                        "Couldn't find site for clip %s" % clip
+                    )
 
     def __play_clip(self, clip):
         if os.path.isdir(
