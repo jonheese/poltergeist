@@ -28,7 +28,7 @@ def get_commands(queue_name):
             if clip.startswith("quiet:") or clip.startswith("quiet_all:"):
                 clips = [clip]
                 break
-        time.sleep(0.05)
+        time.sleep(0.25)
     return json.dumps({"clips": clips})
 
 
