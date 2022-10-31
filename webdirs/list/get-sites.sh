@@ -2,7 +2,8 @@
 #set -x
 
 . /opt/poltergeist/webdirs/list/pilist.txt
-hostname=$(/bin/hostname -f)
+HOSTNAME=$(which hostname)
+hostname=$($HOSTNAME -f)
 sites=$(find "${POLTERGEIST_DIR}/webdirs" -type d | sort)
 suffix=".tv"$(echo "$site_pi_list" | grep $hostname | awk '{print $2}')
 
