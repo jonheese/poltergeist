@@ -111,6 +111,8 @@ class PoltergeistClient():
                                         "google_translate_limit",
                                         100
                                       ))
+        self.blacklist = config.get("blacklist", [])
+
         if config.get("debug"):
             verbosity = 2
         if config.get("quiet"):
@@ -279,6 +281,11 @@ class PoltergeistClient():
                     )
                     continue
                 clip = clip.split(":")[0]
+                if clip in self.blacklist:
+                    self._log.debug(
+                        "Skipping clip %s because it is blacklisted" % clip
+                    )
+                    continue
                 if clip == "quiet" or clip == "quiet_all":
                     self.quiet_queue.put(clip)
                     self._log.info("Put %s in the queue" % clip)
