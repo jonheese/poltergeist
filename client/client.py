@@ -105,6 +105,8 @@ class PoltergeistClient():
                 self.disarm_time = None
         else:
             self.disarm_time = None
+
+        self.blacklist = config.get("blacklist", [])
         self.killall_cmd = config.get("killall_cmd", "killall")
         verbosity = int(config.get("verbosity", 1))
         self.google_translate_limit = int(config.get(
@@ -284,7 +286,7 @@ class PoltergeistClient():
                     self._log.info("Put %s in the queue" % clip)
                 else:
                     self._log.debug("clip %s command received" % clip)
-                    if play:
+                    if play and clip not in self.blacklist:
                         if clip.startswith("speech"):
                             clip_played = self.__play_speech(
                                 " ".join(clip.split()[1:])

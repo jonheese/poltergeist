@@ -9,6 +9,9 @@ NOTE: Poltergeist can run on Python 2.7 or 3.x, although 3.x is preferred and su
 ### Arming/Disarming Time
 The settings `arm_time` and `disarm_time` are optional and tell the Poltergeist client when you want sound clips to be played.  If you do not specify either of them, sound clips will be played 24x7 on demand.  If you specify _either_ of them, sound clips will only be played after the `arm_time` and before the `disarm_time`, with the default value for `arm_time` being `7:00` and `disarm_time` being `17:00`.
 
+### Blacklist
+The optional setting `blacklist` is a list of clip names that will never be played on your Poltergeist client.  If not present (or empty) all available clips will be played as normal.  If a blacklisted clip is requested in your Poltergeist client it will be ignored. 
+
 ### Linux
 Should work on Ubuntu 18.04+, Debian 8+, RHEL/CentOS 7+, Fedora, or Raspbian (really, any Linux with systemd and either `yum` or `apt`).
 ```
@@ -31,7 +34,10 @@ cp config-dist.json ~/.poltergeist/config.json
 #    "debug": false,
 #    "quiet": true,
 #    "arm_time": "7:00",
-#    "disarm_time": "17:00"
+#    "disarm_time": "17:00",
+#    "blacklist": [
+#        "lastchristmas"
+#    ]
 #
 ./install-client.sh # provide sudo password, if not root
 systemctl start poltergeist-client
@@ -62,7 +68,10 @@ cp config-dist.json ~/.poltergeist/config.json
 #    "debug": false,
 #    "quiet": true,
 #    "arm_time": "7:00",
-#    "disarm_time": "17:00"
+#    "disarm_time": "17:00",
+#    "blacklist": [
+#        "lastchristmas"
+#    ]
 #
 ./install-client.sh # provide sudo password, if not root
 lanchctl load /Library/LaunchAgents/com.jonheese.poltergeist-client.plist
@@ -99,7 +108,10 @@ cp config-dist.json %appdata%\.poltergeist\config.json
 #    "debug": false,
 #    "quiet": true,
 #    "arm_time": "7:00",
-#    "disarm_time": "17:00"
+#    "disarm_time": "17:00",
+#    "blacklist": [
+#        "lastchristmas"
+#    ]
 #
 # edit start-poltergeist.ps1 and fill in the path to the pythonw.exe binary on your system
 ```
