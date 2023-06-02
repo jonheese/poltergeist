@@ -1,4 +1,4 @@
-#!/usr/bin/env PYTHONUNBUFFERED=1 python
+#!/usr/bin/env PYTHONUNBUFFERED=1 python3
 
 import glob
 import json
@@ -20,7 +20,7 @@ class PoltergeistClient():
         logging.basicConfig(
             level=logging.DEBUG,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            datefmt='%m-%d %H:%M',
+            datefmt='%m-%d %H:%M:%S',
         )
         self._log.setLevel(logging.DEBUG)
         self.checkpoint = 0
