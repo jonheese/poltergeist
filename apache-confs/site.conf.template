@@ -1,5 +1,4 @@
 <VirtualHost *:80>
-	ServerName @site@.tv.inetu.org
-	ServerAlias @site@.tv.inetu.net
+	ServerName @site@.tv.istolethis.com
 	DocumentRoot /var/www/@site@
 </VirtualHost>

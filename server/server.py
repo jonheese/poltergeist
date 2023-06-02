@@ -63,9 +63,7 @@ def submit_command(clip_name=None, queue_name=None):
 
     if not queue_name:
         domain = request.headers['Host']
-        if domain.endswith("inetu.net"):
-            queue_name = "inetu-hdmi13"
-        elif domain.endswith("inetu.org") or domain.endswith("jonheese.com"):
+        if domain.endswith("jonheese.com") or domain.endswith('istolethis.com'):
             queue_name = "inetu-hdmi19"
         else:
             return jsonify(status="I couldn't find the queue_name for the " +
