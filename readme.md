@@ -3,7 +3,7 @@ Makes TVs (and other computers) talk to you
 
 Poltergeist uses a server/client architecture, where there is a single server to which clients connect and subscribe to sound clip events from a queue.  You probably want to run a client (runs on your local machine, waits for sound clip events and plays the sound clips for you).
 
-NOTE: Poltergeist can run on Python 2.7 or 3.x, although 3.x is preferred and support for 2.7 will be deprecated at some point in the future.
+NOTE: Poltergeist can run on Python 2.7 or 3.x, although 3.x is preferred and support for 2.7 will be deprecated at some point in the future
 
 ## Client Installation
 ### Arming/Disarming Time
