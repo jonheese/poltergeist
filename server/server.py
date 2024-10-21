@@ -8,8 +8,10 @@ from jinja2 import TemplateNotFound
 from datetime import datetime
 
 app = Flask(__name__)
-limiter = Limiter(app,
-                  key_func=get_remote_address)
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+)
 
 redis = Redis()
 app.config['REDIS_QUEUE_KEY'] = 'poltergeist'
