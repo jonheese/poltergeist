@@ -2,3 +2,5 @@ config-local.conf
 config.json
 *.swp
 *.pyc
+.DS_Store
+venv
